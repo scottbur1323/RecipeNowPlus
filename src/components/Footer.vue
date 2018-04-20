@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p>{{ msg }}</p>
+  <div id="footer">
+    <p id="copyright">{{ msg }}</p>
   </div>
 </template>
 
@@ -16,14 +16,19 @@ export default {
 </script>
 
 <style scoped>
-p {
+#footer {
   width: 100%;
   height: 25px;
   position: fixed;
-  background-color: black;
-  opacity: 0.5;
+  background-color: white;
+  opacity: 0.8;
+  bottom: 10px;
   left: 0px;
-  bottom: 0px;
-  color: white;
+  padding-bottom: 8px;
+}
+#copyright {
+  padding-left: 10px;
+  font-size: 12px;
+  color: grey;
 }
 </style>

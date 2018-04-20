@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../static/Background.jpg" alt="">
+    <img id="backgroundImage" src="../static/Background.jpg" alt="">
     <app-header></app-header>
     <router-view id="router"/>
     <app-footer></app-footer>
@@ -23,15 +23,26 @@ export default {
 #app {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  /* margin-top: 10px; */
+  max-width: 100%;
+  max-height: 100vh;
+  background-color: #cccccc;
 }
 #router {
-  margin-top: 80px;
+  margin-top: 15vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  left:0px;
 }
-img {
+#backgroundImage {
   top: 0px;
   position: absolute;
-  max-width: 100vw;
-  max-height: 100vh;
+  width: 100vw;
+  min-width: 100vh;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 100vh;
+  left:0px;
 }
 </style>

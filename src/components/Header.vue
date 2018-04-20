@@ -23,15 +23,15 @@ export default {
   width: 100%;
   position: fixed;
   top: 5px;
+  left: 0px;
   color: white;
   text-align: center;
 }
 .background {
   min-height: 75px;
-  
   position: absolute;
   width: 100%;
-  opacity: 0.9;
+  opacity: 0.85;
   display: flex;
   flex-direction: row;
   justify-content: center;
