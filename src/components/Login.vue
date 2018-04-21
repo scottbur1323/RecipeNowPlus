@@ -67,6 +67,8 @@ export default {
       })
     },
     checkTheUser: function() {
+      this.userNameInput = this.userNameInput.toLowerCase()
+      this.userPasswordInput = this.userPasswordInput.toLowerCase()
       for (let i=0;i<this.usersAPIdata.length;i++) {
         if (this.userNameInput == this.usersAPIdata[i].userName) {
           if (this.userPasswordInput == this.usersAPIdata[i].password) {
