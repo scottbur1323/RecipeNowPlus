@@ -2,31 +2,63 @@
   <div id="home">
     <section class="wholeMealsSection">
       <div id="homeButtons">
-        <button>Grocery List</button>
-        <button>Search for Meals</button>
-        <br/>
-        <button>Delete Meal</button>
-        <button>Update Meal</button>
+        <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
+        <button v-show="showMeals">Search for Meals</button>
+        <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
+        <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
+        <button v-show="showUpdates" @click="goHome">Go Back</button>
+        <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
-      <section id="form">
+      <section id="form" v-show="showMeals">
         <h2>{{ currentUser.userName }}'s  Meals</h2>
         <button @click="userLogout">Logout</button>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
-              <section class="myMealCard">
+              <section id="meal.id" class="myMealCard" @click="clickMeal(meal.id)">
                 <img class="cardImage":src="meal.picURL" alt="">
                 <p>{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
+        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
+      </section>
+      <section id="form" v-show="showDeletes">
+        <h2>{{ currentUser.userName }}'s Meals</h2>
+        <button @click="userLogout">Logout</button>
+        <h3>Click Meals to add to Grocery List</h3>
+        <div id="mealCardBox">
+          <div v-for="meal in mealsAPIdata">
+              <section id="meal.id" class="myMealCard" style="background-color: red;"@click="deleteMeal(meal.id)">
+                <img class="cardImage":src="meal.picURL" alt="">
+                <p>{{ meal.mealName }}</p>
+              </section>
+          </div>
+        </div>
+        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
+      </section>
+      <section id="form" v-show="showUpdates">
+        <h2>{{ currentUser.userName }}'s Meals</h2>
+        <button @click="userLogout">Logout</button>
+        <h3>Click Meals to add to Grocery List</h3>
+        <div id="mealCardBox">
+          <div v-for="meal in mealsAPIdata">
+              <section id="meal.id" class="myMealCard" style="background-color: blue;"@click="updateMeal(meal.id)">
+                <img class="cardImage":src="meal.picURL" alt="">
+                <p>{{ meal.mealName }}</p>
+              </section>
+          </div>
+        </div>
+        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
       </section>
       <div id="homeButtons2">
-        <button>Grocery List</button>
-        <button>Search for Meals</button>
+        <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
+        <button v-show="showMeals">Search for Meals</button>
         <br/>
-        <button>Delete Meal</button>
-        <button>Update Meal</button>
+        <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
+        <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
+        <button v-show="showUpdates" @click="goHome">Go Back</button>
+        <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
     </section>
 
@@ -38,7 +70,12 @@ export default {
   name: 'Home',
   data () {
     return {
-      msg: 'YOU ARE HOME'
+      selectedMeals: [],
+      amountSelected: false,
+      showMeals: true,
+      showDeletes: false,
+      showUpdates: false,
+      shouldDelete: false
     }
   },
   methods: {
@@ -50,6 +87,60 @@ export default {
   methods: {
     userLogout: function() {
       location.reload()
+    },
+    clickMeal: function(mealID) {
+      for (let i=0;i<this.selectedMeals.length;i++) {
+        if (mealID == this.selectedMeals[i]) {
+          this.selectedMeals.splice(i, 1)
+          this.updateTotalSelected(event, mealID)
+          event.target.style.opacity = 1
+          console.log("Meal removed!")
+          return
+        }
+      }
+      this.selectedMeals.push(mealID)
+      event.target.style.opacity = 0.2
+      this.updateTotalSelected(event, mealID)
+      console.log("Meal added!")
+      return
+    },
+    updateTotalSelected: function(event, mealID) {
+      if (this.selectedMeals.length == 0) {
+        this.amountSelected = false
+      } else this.amountSelected = true
+    },
+    goToGroceryList: function() {
+      if (this.selectedMeals.length < 1) {
+        alert("Select at least one meal to make a grocery list!")
+        return
+      }
+    },
+    deleteMeal: function(mealID) {
+      this.shouldDelete = confirm("Are you sure you want to delete this meal?")
+      if (this.shouldDelete == true) {
+        this.actuallyDeleteMeal(mealID)
+      } else {
+        event.target.style.opacity = 1
+        alert("Meal NOT deleted.")
+      }
+    },
+    actuallyDeleteMeal: function(mealID) {
+      alert("meal DELETED!")
+    },
+    showTheDeletes: function() {
+      this.showMeals = false
+      this.showUpdates = false
+      this.showDeletes = true
+    },
+    showTheUpdates: function() {
+      this.showMeals = false
+      this.showDeletes = false
+      this.showUpdates = true
+    },
+    goHome: function() {
+      this.showMeals = true
+      this.showUpdates = false
+      this.showDeletes = false
     }
   }
 }
@@ -60,6 +151,13 @@ export default {
   font-family: Helvetica, sans-serif;
   font-weight: light;
   -webkit-font-smoothing: antialiased;
+}
+h4 {
+  height: 30px;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
 }
 h2 {
   height: 30px;
@@ -78,10 +176,9 @@ section #form {
   min-width: 310px;
   box-sizing: border-box;
   padding: 5px 20px;
-  background-color: rgba(255,255,255,0.6);
-  border-radius: 30px;
+  background-color: rgba(255,255,255,0.8);
   border-width: thin;
-  border-color: grey;
+  border-color: rgba(255,255,255,1);
   border-style: solid;
   margin-bottom: 2vh;
   display: flex;
@@ -91,7 +188,7 @@ section #form {
 #mealCardBox {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
 }
 button {

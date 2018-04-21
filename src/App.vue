@@ -44,7 +44,7 @@ export default {
 }
 #backgroundImage {
   top: 0px;
-  position: absolute;
+  position: fixed;
   width: 100vw;
   min-width: 100vw;
   max-width: 100%;
