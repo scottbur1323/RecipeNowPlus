@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <section class="wholeMealsSection">
-      <div id="loginButtons">
+      <div id="homeButtons">
         <button>Grocery List</button>
         <button>Search for Meals</button>
         <br/>
@@ -21,7 +21,7 @@
           </div>
         </div>
       </section>
-      <div id="loginButtons2">
+      <div id="homeButtons2">
         <button>Grocery List</button>
         <button>Search for Meals</button>
         <br/>
@@ -74,17 +74,16 @@ h2 {
 }
 section #form {
   position: relative;
-  width: 80vw;
+  min-width: 100vw;
   min-width: 310px;
   box-sizing: border-box;
   padding: 5px 20px;
-  background-color: white;
+  background-color: rgba(255,255,255,0.6);
   border-radius: 30px;
   border-width: thin;
   border-color: grey;
   border-style: solid;
-  margin-bottom: 3vh;
-  padding-bottom: 100px;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -157,17 +156,19 @@ h3 {
   display: flex;
   justify-content: center;
 }
-#loginButtons {
-  width: 80vw;
+#homeButtons {
+  max-width: 100vw;
+  min-width: 310px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
 }
-#loginButtons2 {
-  width: 80vw;
-  margin-bottom: 140px;
+#homeButtons2 {
+  width: 100vw;
+  min-width: 310px;
+  margin-bottom: 130px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

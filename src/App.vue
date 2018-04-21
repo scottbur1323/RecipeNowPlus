@@ -10,6 +10,7 @@
 <script>
 import Header from './components/Header'
 import Footer from './components/Footer'
+
 export default {
   name: 'App',
   components: {
@@ -32,18 +33,14 @@ export default {
 }
 #router {
   opacity: 0.9;
-  padding-top: 0px;
-  margin-top: 84px;
-  margin-bottom: 15vh;
+  /* padding-top: 68px; */
+  margin-top: 69px;
+  padding-bottom: 150px;
   max-width: 100%;
   max-height: 100%;
   min-width: 100vw;
   position: fixed;
   overflow-y: scroll;
-}
-app-footer {
-  /* padding-top: 45px; */
-  /* margin-top: 45px; */
 }
 #backgroundImage {
   top: 0px;
@@ -54,5 +51,9 @@ app-footer {
   max-height: 100%;
   min-height: 100vh;
   left:0px;
+}
+app-footer {
+  position: relative;
+  margin-top: 50px;
 }
 </style>

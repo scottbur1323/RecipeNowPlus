@@ -16,7 +16,7 @@ export default new Router({
       component: Login
     },
     {
-      path: '/NewUser',
+      path: '/',
       name: 'NewUser',
       component: NewUser
     },

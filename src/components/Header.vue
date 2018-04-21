@@ -21,24 +21,23 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  position: fixed;
-  padding-top: 2px;
+  position: absolute;
   color: white;
   text-align: center;
-  top: 8px;
+  top: 5px;
 }
 .background {
-  min-height: 80px;
+  min-height: 50px;
   position: absolute;
   width: 100%;
-  opacity: 0.85;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background-color: white;
+  background-color: rgba(255,255,255,0.75);
 }
 img {
-  width: 200px;
+  width: 150px;
+  height: 70px;
 }
 
 </style>

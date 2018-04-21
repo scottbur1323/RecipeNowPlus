@@ -4,23 +4,23 @@
     <section v-show="showLogin">
       <section id="form" class="userNameInput">
         <h1>Login</h1>
+        <button @click="goToHomePage" class="goHomeButton" type="button" v-show="loginCheck">Go To Home Page!</button>
         <div class="question">
-          <input type="text" v-model="userNameInput" required/>
-          <label>Username</label>
+          <input type="text" v-model="userNameInput" v-show="loginInfo" autofocus required/>
+          <label v-show="loginInfo">Username</label>
         </div>
         <div class="question">
-          <input type="text" @keyup.enter="checkTheUser" v-model="userPasswordInput" required/>
-          <label>Password</label>
+          <input type="text" @keyup.enter="checkTheUser" v-model="userPasswordInput"  v-show="loginInfo" required/>
+          <label v-show="loginInfo">Password</label>
         </div>
         <div id="loginButtons">
-          <button @click="checkTheUser">Login</button>
+          <button @click="checkTheUser" v-show="loginInfo">Login</button>
           <router-link :to="{ name: 'NewUser' }">
-            <button>Create Account</button>
+            <button v-show="loginInfo">Create Account</button>
           </router-link>
         </div>
         <p v-show="loginCheck">You hace successfully logged in!</p>
         <p v-show="imposter">IMPOSTER!  Username and/or password don't exist or don't match!</p>
-        <button @click="goToHomePage" class="goHomeButton" type="button" v-show="loginCheck">Go To Home Page!</button>
       </section>
     </section>
   </div>
@@ -43,6 +43,7 @@ export default {
       imposter: false,
       showLogin: true,
       showHome: false,
+      loginInfo: true,
       currentUser: ''
     }
   },
@@ -71,6 +72,7 @@ export default {
           if (this.userPasswordInput == this.usersAPIdata[i].password) {
             this.imposter = false
             this.loginCheck = true
+            this.loginInfo = false
             this.currentUser = this.usersAPIdata[i]
             return
           }
@@ -226,5 +228,8 @@ p {
 }
 app-home {
   height: 100%;
+}
+.goHomeButton {
+  margin-left: 35px;
 }
 </style>
