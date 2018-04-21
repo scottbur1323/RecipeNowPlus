@@ -1,8 +1,15 @@
 <template>
   <div id="home">
     <section class="wholeMealsSection">
+      <div id="loginButtons">
+        <button @click="logIt">Grocery List</button>
+        <button>Search for Meals</button>
+        <br/>
+        <button>Delete Meal</button>
+        <button>Update Meal</button>
+      </div>
       <section id="form">
-        <h2>My Meals</h2>
+        <h2>{{ currentUser.userName }}'s  Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
@@ -12,17 +19,14 @@
               </section>
           </div>
         </div>
-        <footer>
-          <div id="loginButtons">
-            <button @click="logIt">Test It</button>
-            <!-- <button >Submit</button> -->
-            <!-- <button >Submit</button> -->
-            <!-- <router-link :to="{ name: 'SearchMeals' }">
-              <button>Search For More Meals</button>
-            </router-link> -->
-          </div>
-        </footer>
       </section>
+      <div id="loginButtons2">
+        <button @click="logIt">Grocery List</button>
+        <button>Search for Meals</button>
+        <br/>
+        <button>Delete Meal</button>
+        <button>Update Meal</button>
+      </div>
     </section>
 
   </div>
@@ -41,7 +45,7 @@ export default {
       console.log(this.mealsAPIdata)
     }
   },
-  props: ['mealsAPIdata'],
+  props: ['mealsAPIdata', 'currentUser'],
 }
 </script>
 
@@ -85,20 +89,28 @@ section #form {
   flex-wrap: wrap;
 }
 button {
-  margin-top: 35px;
+  margin-top: 0px;
   background-color: white;
   border: 1px solid #ff4a56;
   line-height: 0;
-  font-size: 17px;
+  font-size: 14px;
+  font-weight: bold;
+  font-weight: 600;
   display: inline-block;
   box-sizing: border-box;
-  padding: 20px 15px;
+  padding: 15px 5px;
   border-radius: 60px;
   color: #ff4a56;
   font-weight: 100;
   letter-spacing: 0.01em;
   position: relative;
   z-index: 1;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 120px;
+
 }
 button:hover, button:focus {
   color: white;
@@ -139,8 +151,19 @@ h3 {
   justify-content: center;
 }
 #loginButtons {
+  width: 80vw;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+#loginButtons2 {
+  width: 80vw;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   position: relative;
 }

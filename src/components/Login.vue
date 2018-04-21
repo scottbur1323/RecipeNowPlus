@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-home :mealsAPIdata="mealsAPIdata" v-show="showHome"></app-home>
+    <app-home :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" v-show="showHome"></app-home>
     <section v-show="showLogin">
       <section id="form" class="userNameInput">
         <h1>Login</h1>
@@ -42,7 +42,8 @@ export default {
       loginCheck: false,
       imposter: false,
       showLogin: true,
-      showHome: false
+      showHome: false,
+      currentUser: ''
     }
   },
   methods: {
@@ -70,6 +71,7 @@ export default {
           if (this.userPasswordInput == this.usersAPIdata[i].password) {
             this.imposter = false
             this.loginCheck = true
+            this.currentUser = this.usersAPIdata[i]
             return
           }
         }
