@@ -48,12 +48,8 @@ export default {
   width: 100vw;
   min-width: 100vw;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 100vh;
   min-height: 100vh;
   left:0px;
-}
-app-footer {
-  position: relative;
-  margin-top: 50px;
 }
 </style>

@@ -21,7 +21,7 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  position: absolute;
+  position: fixed;
   color: white;
   text-align: center;
   top: 5px;
