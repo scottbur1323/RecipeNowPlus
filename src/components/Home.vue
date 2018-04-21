@@ -2,7 +2,7 @@
   <div id="home">
     <section class="wholeMealsSection">
       <div id="loginButtons">
-        <button @click="logIt">Grocery List</button>
+        <button>Grocery List</button>
         <button>Search for Meals</button>
         <br/>
         <button>Delete Meal</button>
@@ -10,6 +10,7 @@
       </div>
       <section id="form">
         <h2>{{ currentUser.userName }}'s  Meals</h2>
+        <button @click="userLogout">Logout</button>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
@@ -21,7 +22,7 @@
         </div>
       </section>
       <div id="loginButtons2">
-        <button @click="logIt">Grocery List</button>
+        <button>Grocery List</button>
         <button>Search for Meals</button>
         <br/>
         <button>Delete Meal</button>
@@ -46,6 +47,11 @@ export default {
     }
   },
   props: ['mealsAPIdata', 'currentUser'],
+  methods: {
+    userLogout: function() {
+      location.reload()
+    }
+  }
 }
 </script>
 
@@ -70,7 +76,6 @@ section #form {
   position: relative;
   width: 80vw;
   min-width: 310px;
-  /* height: 83vh; */
   box-sizing: border-box;
   padding: 5px 20px;
   background-color: white;
@@ -80,7 +85,9 @@ section #form {
   border-style: solid;
   margin-bottom: 3vh;
   padding-bottom: 100px;
-  /* overflow-y: scroll; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #mealCardBox {
   display: flex;

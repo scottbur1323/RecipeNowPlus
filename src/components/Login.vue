@@ -13,7 +13,7 @@
           <label>Password</label>
         </div>
         <div id="loginButtons">
-          <button @click="checkTheUser">Submit</button>
+          <button @click="checkTheUser">Login</button>
           <router-link :to="{ name: 'NewUser' }">
             <button>Create Account</button>
           </router-link>
