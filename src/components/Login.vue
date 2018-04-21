@@ -1,38 +1,91 @@
 <template>
-  <div id="login">
-    <section>
+  <div>
+    <app-home :mealsAPIdata="mealsAPIdata" v-show="showHome"></app-home>
+    <section v-show="showLogin">
       <section id="form" class="userNameInput">
-        <h1>Fancy Text Inputs</h1>
+        <h1>Login</h1>
         <div class="question">
-          <input type="text" required/>
+          <input type="text" v-model="userNameInput" required/>
           <label>Username</label>
         </div>
         <div class="question">
-          <input type="text" required/>
+          <input type="text" @keyup.enter="checkTheUser" v-model="userPasswordInput" required/>
           <label>Password</label>
         </div>
-        <div class="question">
-          <input type="text" required/>
-          <label>Email Confirm</label>
-        </div>
         <div id="loginButtons">
-          <button @click="submitLogin">Submit</button>
+          <button @click="checkTheUser">Submit</button>
           <router-link :to="{ name: 'NewUser' }">
             <button>Create Account</button>
           </router-link>
         </div>
+        <p v-show="loginCheck">You hace successfully logged in!</p>
+        <p v-show="imposter">IMPOSTER!  Username and/or password don't exist or don't match!</p>
+        <button @click="goToHomePage" class="goHomeButton" type="button" v-show="loginCheck">Go To Home Page!</button>
       </section>
     </section>
   </div>
 </template>
 
 <script>
+import Home from './Home'
+
 export default {
   name: 'Login',
   data () {
     return {
-      msg: 'HELLO THEREEE'
+      mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table',
+      usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table',
+      mealsAPIdata: '',
+      usersAPIdata: '',
+      userNameInput: '',
+      userPasswordInput: '',
+      loginCheck: false,
+      imposter: false,
+      showLogin: true,
+      showHome: false
     }
+  },
+  methods: {
+    hitThatAPI: function() {
+      fetch('https://recipe-now-server-heroku.herokuapp.com/users-table')
+      .then(res => {
+          return res.json()
+      })
+      .then(res => {
+          this.usersAPIdata = res.users
+          console.log(this.usersAPIdata);
+      })
+      fetch('https://recipe-now-server-heroku.herokuapp.com/meals-table')
+      .then(res => {
+          return res.json()
+      })
+      .then(res => {
+          this.mealsAPIdata = res.meals
+          console.log(this.mealsAPIdata);
+      })
+    },
+    checkTheUser: function() {
+      for (let i=0;i<this.usersAPIdata.length;i++) {
+        if (this.userNameInput == this.usersAPIdata[i].userName) {
+          if (this.userPasswordInput == this.usersAPIdata[i].password) {
+            this.imposter = false
+            this.loginCheck = true
+            return
+          }
+        }
+      }
+      this.imposter = true
+    },
+    goToHomePage: function() {
+        this.showLogin = false
+        this.showHome = true
+    }
+  },
+  components: {
+    appHome: Home
+  },
+  mounted() {
+    this.hitThatAPI()
   }
 }
 </script>
@@ -44,23 +97,16 @@ export default {
   -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
   transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
 }
-
 * {
   font-family: Helvetica, sans-serif;
   font-weight: light;
   -webkit-font-smoothing: antialiased;
 }
-
-html {
-  background-color: #ff4a56;
-}
-
 #form {
   position: relative;
   display: inline-block;
-  max-width: 700px;
-  min-width: 300px;
-  /* min-height: 100%; */
+  max-width: 310px;
+  min-width: 310px;
   box-sizing: border-box;
   padding: 30px 25px;
   background-color: white;
@@ -78,6 +124,9 @@ html {
   letter-spacing: 0.01em;
   margin-bottom: 35px;
   text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  padding-right: 10px;
 }
 #form button {
   margin-top: 35px;
@@ -167,10 +216,10 @@ html {
   display: flex;
   justify-content: space-between;
 }
-#login {
-  min-width: 100vw;
-}
 .userNameInput {
+  max-width: 85vw;
+}
+p {
   max-width: 85vw;
 }
 </style>

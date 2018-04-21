@@ -1,27 +1,28 @@
 <template>
   <div id="newUser">
     <section>
-      <section id="form" class="userNameInput">
-        <h1>Create New User</h1>
+      <section id="form" class="userNameInput" v-show="true">
+        <h1>Create User</h1>
         <div class="question">
-          <input type="text" required/>
+          <input type="text" v-model="createNameInput" required/>
           <label>Username</label>
         </div>
         <div class="question">
-          <input type="text" required/>
+          <input type="text" v-model="createPasswordInput" required/>
           <label>Password</label>
         </div>
         <div class="question">
-          <input type="text" required/>
-          <label>Email Confirm</label>
+          <input type="text" v-model="createPasswordCheckInput" required/>
+          <label>Password Confirm</label>
         </div>
         <div id="loginButtons">
-          <button @click="submitLogin">Submit</button>
-          <router-link :to="{ name: 'NewUser' }">
-            <button>Back To Login</button>
+          <button @click="checkNewUser" >Submit</button>
+          <router-link :to="{ name: 'Login' }">
+            <button>Back to Login</button>
           </router-link>
         </div>
       </section>
+      <h1>{{ crappy }} -HERE</h1>
     </section>
   </div>
 </template>
@@ -31,7 +32,16 @@ export default {
   name: 'NewUser',
   data () {
     return {
-      msg: ''
+      newUserName: '',
+      createNameInput: '',
+      createPasswordInput: '',
+      createPasswordCheckInput: '',
+    }
+  },
+  props: ['crappy'],
+  methods: {
+    checkNewUser: function() {
+
     }
   }
 }
@@ -44,23 +54,19 @@ export default {
   -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
   transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
 }
-
 * {
   font-family: Helvetica, sans-serif;
   font-weight: light;
   -webkit-font-smoothing: antialiased;
 }
-
 html {
   background-color: #ff4a56;
 }
-
 #form {
   position: relative;
   display: inline-block;
-  max-width: 700px;
+  max-width: 500px;
   min-width: 300px;
-  /* min-height: 100%; */
   box-sizing: border-box;
   padding: 30px 25px;
   background-color: white;
@@ -76,11 +82,11 @@ html {
   color: #ff4a56;
   font-weight: 100;
   letter-spacing: 0.01em;
+  margin-bottom: 35px;
+  text-transform: uppercase;
   display: flex;
   justify-content: center;
   padding-right: 10px;
-  margin-bottom: 35px;
-  text-transform: uppercase;
 }
 #form button {
   margin-top: 35px;

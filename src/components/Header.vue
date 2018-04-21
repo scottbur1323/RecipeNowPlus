@@ -22,13 +22,13 @@ export default {
 .header {
   width: 100%;
   position: fixed;
-  top: 5px;
-  left: 0px;
+  padding-top: 2px;
   color: white;
   text-align: center;
+  top: 8px;
 }
 .background {
-  min-height: 75px;
+  min-height: 80px;
   position: absolute;
   width: 100%;
   opacity: 0.85;

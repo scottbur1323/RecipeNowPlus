@@ -23,12 +23,30 @@ export default {
   background-color: white;
   opacity: 0.8;
   bottom: 10px;
-  left: 0px;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
+  /* left: 0px; */
+  /* padding-top: 25vh; */
 }
 #copyright {
   padding-left: 10px;
   font-size: 12px;
   color: grey;
+}
+.header {
+  width: 100%;
+  position: fixed;
+  padding-top: 2px;
+  color: white;
+  text-align: center;
+}
+.background {
+  min-height: 80px;
+  position: absolute;
+  width: 100%;
+  opacity: 0.85;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: white;
 }
 </style>

@@ -23,23 +23,33 @@ export default {
 #app {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  width: 100vw;
   max-width: 100%;
   max-height: 100vh;
   background-color: #cccccc;
-}
-#router {
-  margin-top: 15vh;
-  width: 100%;
-  position: relative;
   display: flex;
   justify-content: center;
-  left:0px;
+}
+#router {
+  opacity: 0.9;
+  padding-top: 0px;
+  margin-top: 84px;
+  margin-bottom: 15vh;
+  max-width: 100%;
+  height: 83vh;
+  min-width: 100vw;
+  position: fixed;
+  overflow-y: scroll;
+}
+app-footer {
+  /* padding-top: 45px; */
+  /* margin-top: 45px; */
 }
 #backgroundImage {
   top: 0px;
   position: absolute;
   width: 100vw;
-  min-width: 100vh;
+  min-width: 100vw;
   max-width: 100%;
   max-height: 100%;
   min-height: 100vh;
