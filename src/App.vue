@@ -36,7 +36,7 @@ export default {
   margin-top: 84px;
   margin-bottom: 15vh;
   max-width: 100%;
-  height: 83vh;
+  max-height: 100%;
   min-width: 100vw;
   position: fixed;
   overflow-y: scroll;

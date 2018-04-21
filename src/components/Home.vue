@@ -70,9 +70,9 @@ section #form {
   position: relative;
   width: 80vw;
   min-width: 310px;
-  max-height: 83vh;
+  /* height: 83vh; */
   box-sizing: border-box;
-  padding: 5px 25px;
+  padding: 5px 20px;
   background-color: white;
   border-radius: 30px;
   border-width: thin;
@@ -80,7 +80,7 @@ section #form {
   border-style: solid;
   margin-bottom: 3vh;
   padding-bottom: 100px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 #mealCardBox {
   display: flex;
@@ -160,7 +160,7 @@ h3 {
 }
 #loginButtons2 {
   width: 80vw;
-  margin-bottom: 25px;
+  margin-bottom: 140px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

@@ -224,4 +224,7 @@ export default {
 p {
   max-width: 85vw;
 }
+app-home {
+  height: 100%;
+}
 </style>
