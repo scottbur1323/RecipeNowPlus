@@ -32,8 +32,6 @@ export default {
   justify-content: center;
 }
 #router {
-  opacity: 0.9;
-  /* padding-top: 68px; */
   margin-top: 69px;
   padding-bottom: 150px;
   max-width: 100%;

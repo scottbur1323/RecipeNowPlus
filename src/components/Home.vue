@@ -1,6 +1,7 @@
 <template>
   <div id="home">
-    <app-search-meals v-show="showSearch"></app-search-meals>
+    <button id="logoutButton" @click="userLogout">Logout</button>
+    <app-search-meals id="searchPage" v-show="showSearch" @goHome="leaveSearchPage($event)"></app-search-meals>
     <section v-show="showHome" class="wholeMealsSection">
       <div id="homeButtons">
         <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
@@ -12,7 +13,6 @@
       </div>
       <section id="form" v-show="showMeals">
         <h2>{{ currentUser.userName }}'s  Meals</h2>
-        <button @click="userLogout">Logout</button>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
@@ -26,7 +26,6 @@
       </section>
       <section id="form" v-show="showDeletes">
         <h2>{{ currentUser.userName }}'s Meals</h2>
-        <button @click="userLogout">Logout</button>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
@@ -40,7 +39,6 @@
       </section>
       <section id="form" v-show="showUpdates">
         <h2>{{ currentUser.userName }}'s Meals</h2>
-        <button @click="userLogout">Logout</button>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in mealsAPIdata">
@@ -54,8 +52,7 @@
       </section>
       <div id="homeButtons2">
         <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
-        <button v-show="showMeals">Search for Meals</button>
-        <br/>
+        <button v-show="showMeals"  @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
         <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
         <button v-show="showUpdates" @click="goHome">Go Back</button>
@@ -79,16 +76,13 @@ export default {
       showDeletes: false,
       showUpdates: false,
       showSearch: false,
-      shouldDelete: false,
-    }
-  },
-  methods: {
-    logIt: function() {
-      console.log(this.mealsAPIdata)
-    }
+      shouldDelete: false    }
   },
   props: ['mealsAPIdata', 'currentUser'],
   methods: {
+    leaveSearchPage: function(event) {
+        this.showTheHome()
+    },
     userLogout: function() {
       location.reload()
     },
@@ -149,6 +143,10 @@ export default {
     showTheSearch: function () {
       this.showHome = false,
       this.showSearch = true
+    },
+    showTheHome: function() {
+      this.showHome = true
+      this.showSearch = false
     }
   },
   components: {
@@ -158,6 +156,13 @@ export default {
 </script>
 
 <style scoped>
+#logoutButton {
+  position: fixed;
+  top: 20px;
+  right: 5vw;
+  width: 60px;
+  font-variant: small-caps;
+}
 * {
   font-family: Helvetica, sans-serif;
   font-weight: light;
@@ -184,10 +189,9 @@ h2 {
 section #form {
   position: relative;
   min-width: 100vw;
-  min-width: 310px;
   box-sizing: border-box;
   padding: 5px 20px;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255,255,255,0.9);
   border-width: thin;
   border-color: rgba(255,255,255,1);
   border-style: solid;
@@ -233,7 +237,7 @@ button:hover, button:focus {
 .cardImage {
   width: 105px;
   height: 65px;
-  border-radius: 15px;
+  border-radius: 6px;
   border-style: solid;
   border-width: thin;
   border-color: #BD292C;
@@ -282,5 +286,8 @@ h3 {
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
+}
+#searchPage {
+  padding-bottom: 120px;
 }
 </style>
