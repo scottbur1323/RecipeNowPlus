@@ -1,9 +1,10 @@
 <template>
   <div id="home">
-    <section class="wholeMealsSection">
+    <app-search-meals v-show="showSearch"></app-search-meals>
+    <section v-show="showHome" class="wholeMealsSection">
       <div id="homeButtons">
         <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
-        <button v-show="showMeals">Search for Meals</button>
+        <button v-show="showMeals" @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
         <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
         <button v-show="showUpdates" @click="goHome">Go Back</button>
@@ -61,21 +62,24 @@
         <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
     </section>
-
   </div>
 </template>
 
 <script>
+import SearchMeals from './SearchMeals'
+
 export default {
   name: 'Home',
   data () {
     return {
       selectedMeals: [],
       amountSelected: false,
+      showHome: true,
       showMeals: true,
       showDeletes: false,
       showUpdates: false,
-      shouldDelete: false
+      showSearch: false,
+      shouldDelete: false,
     }
   },
   methods: {
@@ -141,7 +145,14 @@ export default {
       this.showMeals = true
       this.showUpdates = false
       this.showDeletes = false
+    },
+    showTheSearch: function () {
+      this.showHome = false,
+      this.showSearch = true
     }
+  },
+  components: {
+    appSearchMeals: SearchMeals,
   }
 }
 </script>

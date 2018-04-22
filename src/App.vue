@@ -41,6 +41,7 @@ export default {
   min-width: 100vw;
   position: fixed;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 #backgroundImage {
   top: 0px;
