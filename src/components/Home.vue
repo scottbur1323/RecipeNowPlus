@@ -79,7 +79,8 @@ export default {
       showSearch: false,
       shouldDelete: false,
       shouldUpdate: false,
-      usersMealsArray: []
+      usersMealsArray: [],
+      putTheUserMeals: ''
     }
   },
   props: ['mealsAPIdata', 'currentUser'],
@@ -156,13 +157,20 @@ export default {
       }
     },
     actuallyDeleteMeal: function(mealID) {
-      let deleteUrl = 'http://localhost:3000/meals-table/' + mealID
+      this.putTheUserMeals = ''
+      let newUserMealsArray = this.currentUser.mealIDs.split(',')
+      let index = newUserMealsArray.indexOf(mealID)
+      newUserMealsArray.splice(index, 1)
+      console.log(newUserMealsArray)
+      this.putTheUserMeals = newUserMealsArray
+      let deleteUrl = 'http://localhost:3000/users-table/' + this.currentUser.id
       fetch(deleteUrl, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        method: 'DELETE'
+        method: 'PUT',
+        body: JSON.stringify({'mealIDs': this.putTheUserMeals})
       })
       .then(function(res) {
         return res.json()
@@ -173,10 +181,6 @@ export default {
       .catch(function(error) {
         console.log(error)
       })
-      var self = this
-      setTimeout(function(){
-        self.$emit('refreshMeals')
-      }, 8000)
       this.removeFromUserData(mealID)
     },
     removeFromUserData: function(mealID) {
