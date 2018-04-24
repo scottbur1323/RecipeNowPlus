@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-new-user v-show="showNewUser" @goHome="goToLoginPage"></app-new-user>
+    <app-new-user v-show="showNewUser" @goHome="goToLoginPage" :usersAPIdata="usersAPIdata"></app-new-user>
     <app-home :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" v-show="showHome" @refreshMeals="hitThatAPI"></app-home>
     <section v-show="showLogin">
       <section id="form" class="userNameInput">
@@ -96,6 +96,10 @@ export default {
           }
         }
       }
+      let self = this
+      setTimeout(function(){
+        self.imposter = false
+      }, 4000)
       this.imposter = true
     },
     goToHomePage: function() {
@@ -254,6 +258,7 @@ export default {
   max-width: 85vw;
 }
 p {
+  text-align: center;
   max-width: 85vw;
 }
 app-home {

@@ -157,12 +157,15 @@ export default {
       }
     },
     actuallyDeleteMeal: function(mealID) {
-      this.putTheUserMeals = ''
       let newUserMealsArray = this.currentUser.mealIDs.split(',')
       let index = newUserMealsArray.indexOf(mealID)
       newUserMealsArray.splice(index, 1)
-      console.log(newUserMealsArray)
-      this.putTheUserMeals = newUserMealsArray
+      let newUserMealsString = ''
+      for (let i=0;i<newUserMealsArray.length;i++) {
+          if (i===0) {
+              newUserMealsString = newUserMealsArray[i]
+          } else newUserMealsString = newUserMealsString + ',' + newUserMealsArray[i]
+      }
       let deleteUrl = 'http://localhost:3000/users-table/' + this.currentUser.id
       fetch(deleteUrl, {
         headers: {
@@ -170,7 +173,7 @@ export default {
             'Content-Type': 'application/json'
         },
         method: 'PUT',
-        body: JSON.stringify({'mealIDs': this.putTheUserMeals})
+        body: JSON.stringify({'mealIDs': newUserMealsString})
       })
       .then(function(res) {
         return res.json()

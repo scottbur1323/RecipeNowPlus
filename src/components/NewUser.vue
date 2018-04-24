@@ -12,15 +12,18 @@
           <label>Password</label>
         </div>
         <div class="question">
-          <input type="text" v-model="createPasswordCheckInput" required/>
+          <input type="text" v-model="createPasswordCheckInput" @keyup.enter="checkNewUser()" required/>
           <label>Password Confirm</label>
+          <p v-show="passwordsDontMatch">Passwords don't match!</p>
+          <p v-show="creatingUser">Creating user...</p>
+          <p v-show="userNameAlreadyExists">Username already exists</p>
+          <p v-show="noSpecialCharacters">Cannot use any special characters</p>
         </div>
         <div id="loginButtons">
-          <button @click="checkNewUser" >Submit</button>
+          <button @click="checkNewUser">Create it!</button>
           <button @click="goBackToLogin">Back to Login</button>
         </div>
       </section>
-      <h1>{{ crappy }}</h1>
     </section>
   </div>
 </template>
@@ -34,17 +37,114 @@ export default {
       createNameInput: '',
       createPasswordInput: '',
       createPasswordCheckInput: '',
+      passwordsDontMatch: false,
+      creatingUser: false,
+      userNameAlreadyExists: false,
+      noSpecialCharacters: false
     }
   },
-  props: ['crappy'],
+  props: ['usersAPIdata'],
   methods: {
     checkNewUser: function() {
       if (this.createPasswordInput == this.createPasswordCheckInput) {
-
+        var self = this
+        if (this.checkForHackers(this.createPasswordInput, this.createNameInput)) {
+            if (this.checkForExistingUser(this.createNameInput)) {
+              let areYouSure = confirm(`Are you sure you want to create the user: ${this.createNameInput}`)
+              if (areYouSure) {
+                let self = this
+                setTimeout(function(){
+                  self.creatingUser = false
+                  location.reload()
+                }, 3000)
+                this.creatingUser = true
+                this.passwordsDontMatch = false
+                this.userNameAlreadyExists = false
+                this.noSpecialCharacters = false
+                this.addTheNewUserToDB(this.createNameInput, this.createPasswordInput)
+              }
+              return
+            }
+        }
+      } else {
+        let self = this
+        setTimeout(function(){
+          self.passwordsDontMatch = false
+        }, 3000)
+        this.passwordsDontMatch = true
+        this.creatingUser = false
+        this.userNameAlreadyExists = false
+        this.noSpecialCharacters = false
       }
+    },
+    checkForHackers: function(password, username) {
+      let letterNumber = /^[0-9a-zA-Z]+$/
+      if(password.match(letterNumber)) {
+      } else {
+        let self = this
+        setTimeout(function(){
+          self.noSpecialCharacters = false
+        }, 3000)
+        this.noSpecialCharacters = true
+        this.creatingUser = false
+        this.passwordsDontMatch = false
+        this.userNameAlreadyExists = false
+        return false
+      }
+      if(username.match(letterNumber)) {
+      } else {
+        let self = this
+        setTimeout(function(){
+          self.noSpecialCharacters = false
+        }, 3000)
+        this.noSpecialCharacters = true
+        this.creatingUser = false
+        this.passwordsDontMatch = false
+        this.userNameAlreadyExists = false
+        return false
+      }
+      return true
+    },
+    checkForExistingUser: function(username) {
+        for (let i=0;i<this.usersAPIdata.length;i++) {
+          if (this.usersAPIdata[i].userName == username.toLowerCase()) {
+            let self = this
+            setTimeout(function(){
+              self.userNameAlreadyExists = false
+            }, 4000)
+            this.userNameAlreadyExists = true
+            return false
+          }
+        }
+        return true
     },
     goBackToLogin: function() {
       this.$emit('goHome')
+    },
+    addTheNewUserToDB: function(userName, password) {
+      fetch('http://localhost:3000/users-table', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          "userName": userName,
+          "password": password,
+          "mealIDs":"1,2,3",
+          "savedLists":"",
+          "justInCase":""
+        })
+      })
+      .then(function(res) {
+        return res.json()
+      })
+      .then(function(res) {
+        return res
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
     }
   }
 }
@@ -156,10 +256,10 @@ html {
   outline: none;
   background: #ff4a56;
   color: white;
-  margin-top: 30px;
+  margin-top: 6px;
 }
 #form .question input[type="text"]:valid {
-  margin-top: 30px;
+  margin-top: 6px;
 }
 #form .question input[type="text"]:focus ~ label {
   -moz-transform: translate(0, -35px);
@@ -184,5 +284,9 @@ html {
 }
 .userNameInput {
   max-width: 85vw;
+}
+p {
+  text-align: center;
+  margin-bottom: -34px;
 }
 </style>
