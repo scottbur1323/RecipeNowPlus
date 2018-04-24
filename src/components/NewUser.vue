@@ -17,12 +17,10 @@
         </div>
         <div id="loginButtons">
           <button @click="checkNewUser" >Submit</button>
-          <router-link :to="{ name: 'Login' }">
-            <button>Back to Login</button>
-          </router-link>
+          <button @click="goBackToLogin">Back to Login</button>
         </div>
       </section>
-      <h1>{{ crappy }} -HERE</h1>
+      <h1>{{ crappy }}</h1>
     </section>
   </div>
 </template>
@@ -41,7 +39,12 @@ export default {
   props: ['crappy'],
   methods: {
     checkNewUser: function() {
+      if (this.createPasswordInput == this.createPasswordCheckInput) {
 
+      }
+    },
+    goBackToLogin: function() {
+      this.$emit('goHome')
     }
   }
 }

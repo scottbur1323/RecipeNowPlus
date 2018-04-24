@@ -1,6 +1,7 @@
 <template>
   <div>
-    <app-home :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" v-show="showHome"></app-home>
+    <app-new-user v-show="showNewUser" @goHome="goToLoginPage"></app-new-user>
+    <app-home :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" v-show="showHome" @refreshMeals="hitThatAPI"></app-home>
     <section v-show="showLogin">
       <section id="form" class="userNameInput">
         <h1>Login</h1>
@@ -15,9 +16,7 @@
         </div>
         <div id="loginButtons">
           <button @click="checkTheUser" v-show="loginInfo">Login</button>
-          <router-link :to="{ name: 'NewUser' }">
-            <button v-show="loginInfo">Create Account</button>
-          </router-link>
+          <button v-show="loginInfo" @click="goToNewUserPage">Create Account</button>
         </div>
         <p v-show="loginCheck">You hace successfully logged in!</p>
         <p v-show="imposter">IMPOSTER!  Username and/or password don't exist or don't match!</p>
@@ -28,13 +27,14 @@
 
 <script>
 import Home from './Home'
+import NewUser from './NewUser'
 
 export default {
   name: 'Login',
   data () {
     return {
-      mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table',
-      usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table',
+      mealsAPI: 'http://localhost:3000/meals-table/',
+      usersAPI: 'http://localhost:3000/users-table/',
       mealsAPIdata: '',
       usersAPIdata: '',
       userNameInput: '',
@@ -42,31 +42,47 @@ export default {
       loginCheck: false,
       imposter: false,
       showLogin: true,
+      showNewUser: false,
       showHome: false,
       loginInfo: true,
-      currentUser: ''
+      currentUser: {},
+      showNewUser: false
+    }
+  },
+  watch: {
+    usersAPIdata: function() {
+      if (this.currentUser !== {}) {
+        for (let i=0;i<this.usersAPIdata.length;i++) {
+          if (this.currentUser.id == this.usersAPIdata[i].id) {
+            this.currentUser = this.usersAPIdata[i]
+          }
+        }
+      }
     }
   },
   methods: {
     hitThatAPI: function() {
-      fetch('https://recipe-now-server-heroku.herokuapp.com/users-table')
+      fetch(this.usersAPI)
       .then(res => {
           return res.json()
       })
       .then(res => {
-          this.usersAPIdata = res.users
-          console.log(this.usersAPIdata);
+        this.usersAPIdata = res.users
+        this.hitThatAPI2()
       })
-      fetch('https://recipe-now-server-heroku.herokuapp.com/meals-table')
+    },
+    hitThatAPI2: function() {
+      fetch(this.mealsAPI)
       .then(res => {
           return res.json()
       })
       .then(res => {
           this.mealsAPIdata = res.meals
-          console.log(this.mealsAPIdata);
+          return res
       })
     },
     checkTheUser: function() {
+      this.hitThatAPI()
       this.userNameInput = this.userNameInput.toLowerCase()
       this.userPasswordInput = this.userPasswordInput.toLowerCase()
       for (let i=0;i<this.usersAPIdata.length;i++) {
@@ -84,11 +100,23 @@ export default {
     },
     goToHomePage: function() {
         this.showLogin = false
+        this.showNewUser = false
         this.showHome = true
+    },
+    goToNewUserPage: function() {
+        this.showLogin = false
+        this.showHome = false
+        this.showNewUser = true
+    },
+    goToLoginPage: function() {
+        this.showHome = false
+        this.showNewUser = false
+        this.showLogin = true
     }
   },
   components: {
-    appHome: Home
+    appHome: Home,
+    appNewUser: NewUser
   },
   mounted() {
     this.hitThatAPI()

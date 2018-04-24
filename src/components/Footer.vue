@@ -29,4 +29,9 @@ export default {
   font-size: 12px;
   color: grey;
 }
+* {
+  font-family: Helvetica, sans-serif;
+  font-weight: light;
+  -webkit-font-smoothing: antialiased;
+}
 </style>

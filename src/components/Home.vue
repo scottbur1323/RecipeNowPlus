@@ -1,24 +1,24 @@
 <template>
   <div id="home">
     <button id="logoutButton" @click="userLogout">Logout</button>
-    <app-search-meals id="searchPage" v-show="showSearch" @goHome="leaveSearchPage($event)"></app-search-meals>
+    <app-search-meals :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" id="searchPage" v-show="showSearch" @goHome="leaveSearchPage($event)" @addedAMeal="refreshMeals($event)"></app-search-meals>
     <section v-show="showHome" class="wholeMealsSection">
       <div id="homeButtons">
         <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
         <button v-show="showMeals" @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
-        <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
+        <!-- <button v-show="showMeals" @click="showTheUpdates">Update Meal</button> -->
         <button v-show="showUpdates" @click="goHome">Go Back</button>
         <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
       <section id="form" v-show="showMeals">
-        <h2>{{ currentUser.userName }}'s  Meals</h2>
+        <h2>{{ currentUser.userName }}'s Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
-          <div v-for="meal in mealsAPIdata">
+          <div v-for="meal in usersMealsArray">
               <section id="meal.id" class="myMealCard" @click="clickMeal(meal.id)">
-                <img class="cardImage":src="meal.picURL" alt="">
-                <p>{{ meal.mealName }}</p>
+                <img class="cardImage":src="meal.picURL">
+                <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
@@ -28,10 +28,10 @@
         <h2>{{ currentUser.userName }}'s Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
-          <div v-for="meal in mealsAPIdata">
-              <section id="meal.id" class="myMealCard" style="background-color: red;"@click="deleteMeal(meal.id)">
-                <img class="cardImage":src="meal.picURL" alt="">
-                <p>{{ meal.mealName }}</p>
+          <div v-for="meal in usersMealsArray">
+              <section id="meal.id" class="myMealCard" @click="clickDelete(meal.id)" style="background-color: #DA9A98;">
+                <img class="cardImage":src="meal.picURL">
+                <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
@@ -41,10 +41,10 @@
         <h2>{{ currentUser.userName }}'s Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
-          <div v-for="meal in mealsAPIdata">
-              <section id="meal.id" class="myMealCard" style="background-color: blue;"@click="updateMeal(meal.id)">
-                <img class="cardImage":src="meal.picURL" alt="">
-                <p>{{ meal.mealName }}</p>
+          <div v-for="meal in usersMealsArray">
+              <section id="meal.id" class="myMealCard" @click="clickUpdate(meal.id)" style="background-color: #8CADE5;">
+                <img class="cardImage":src="meal.picURL">
+                <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
@@ -54,7 +54,7 @@
         <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
         <button v-show="showMeals"  @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
-        <button v-show="showMeals" @click="showTheUpdates">Update Meal</button>
+        <!-- <button v-show="showMeals" @click="showTheUpdates">Update Meal</button> -->
         <button v-show="showUpdates" @click="goHome">Go Back</button>
         <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
@@ -64,6 +64,7 @@
 
 <script>
 import SearchMeals from './SearchMeals'
+
 
 export default {
   name: 'Home',
@@ -76,12 +77,37 @@ export default {
       showDeletes: false,
       showUpdates: false,
       showSearch: false,
-      shouldDelete: false    }
+      shouldDelete: false,
+      shouldUpdate: false,
+      usersMealsArray: []
+    }
   },
   props: ['mealsAPIdata', 'currentUser'],
+  watch: {
+    currentUser: function() {
+      this.selectUserMeals()
+    }
+  },
   methods: {
+    selectUserMeals: function() {
+      let usersMealIDs = this.currentUser.mealIDs.split(',')
+      let usersMealsArray = []
+      for (let i=0;i<this.mealsAPIdata.length;i++) {
+        for (let j=0;j<usersMealIDs.length;j++) {
+            if (this.mealsAPIdata[i].id == usersMealIDs[j]) {
+              usersMealsArray.push(this.mealsAPIdata[i])
+            }
+        }
+      }
+      this.usersMealsArray = usersMealsArray
+      return usersMealsArray
+    },
     leaveSearchPage: function(event) {
-        this.showTheHome()
+      this.showTheHome()
+    },
+    refreshMeals: function() {
+      this.$emit('refreshMeals')
+      this.selectUserMeals()
     },
     userLogout: function() {
       location.reload()
@@ -102,6 +128,22 @@ export default {
       console.log("Meal added!")
       return
     },
+    clickDelete: function(mealID) {
+      this.shouldDelete = confirm("Are you sure you want to delete this meal?")
+      if (this.shouldDelete == true) {
+        this.actuallyDeleteMeal(mealID)
+      } else {
+        alert("Meal NOT deleted.")
+      }
+    },
+    clickUpdate: function(mealID) {
+      this.shouldUpdate = confirm("Are you sure you want to update this meal?")
+      if (this.shouldUpdate == true) {
+        this.actuallyUpdateMeal(mealID)
+      } else {
+        alert("Meal NOT updated.")
+      }
+    },
     updateTotalSelected: function(event, mealID) {
       if (this.selectedMeals.length == 0) {
         this.amountSelected = false
@@ -109,21 +151,40 @@ export default {
     },
     goToGroceryList: function() {
       if (this.selectedMeals.length < 1) {
-        alert("Select at least one meal to make a grocery list!")
+        alert("Please select at least one meal to make a grocery list!")
         return
       }
     },
-    deleteMeal: function(mealID) {
-      this.shouldDelete = confirm("Are you sure you want to delete this meal?")
-      if (this.shouldDelete == true) {
-        this.actuallyDeleteMeal(mealID)
-      } else {
-        event.target.style.opacity = 1
-        alert("Meal NOT deleted.")
-      }
-    },
     actuallyDeleteMeal: function(mealID) {
-      alert("meal DELETED!")
+      let deleteUrl = 'http://localhost:3000/meals-table/' + mealID
+      fetch(deleteUrl, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'DELETE'
+      })
+      .then(function(res) {
+        return res.json()
+      })
+      .then(function(res) {
+        return res
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+      var self = this
+      setTimeout(function(){
+        self.$emit('refreshMeals')
+      }, 8000)
+      this.removeFromUserData(mealID)
+    },
+    removeFromUserData: function(mealID) {
+      for (let i=0;i<this.usersMealsArray.length;i++) {
+          if (mealID == this.usersMealsArray[i].id) {
+              this.usersMealsArray.splice(i, 1)
+          }
+      }
     },
     showTheDeletes: function() {
       this.showMeals = false
@@ -150,7 +211,7 @@ export default {
     }
   },
   components: {
-    appSearchMeals: SearchMeals,
+    appSearchMeals: SearchMeals
   }
 }
 </script>
@@ -289,5 +350,9 @@ h3 {
 }
 #searchPage {
   padding-bottom: 120px;
+}
+.mealName {
+  text-align: center;
+  font-size: 14px;
 }
 </style>

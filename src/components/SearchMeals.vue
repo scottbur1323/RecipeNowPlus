@@ -37,12 +37,26 @@ export default {
       searchedMealData: [],
       ingredientsToAddArray: [],
       ingredientsToAddString: '',
+      mealIdToAdd: 0,
       mealToAdd: {}
     }
   },
+  props: ['mealsAPIdata', 'currentUser'],
   methods: {
     passItUp: function() {
       this.$emit('goHome')
+    },
+    mealWasAdded: function() {
+      for (let i=0;i<this.searchedMealData.length;i++) {
+        if (this.searchedMealData[i].recipe_id == this.mealIdToAdd) {
+          this.searchedMealData.splice(i, 1)
+        }
+      }
+      let self = this;
+      setTimeout(function(){
+        self.$emit('addedAMeal')
+      }, 5000)
+      this.$emit('addedAMeal')
     },
     searchForRecipes: function() {
       fetch('http://localhost:3000/f2f', {
@@ -64,8 +78,8 @@ export default {
       })
     },
     addToMyMeals: function(mealID) {
-      console.log(mealID)
-      console.log(this.searchedMealData.length)
+      this.mealIdToAdd = mealID
+      console.log(this.searchedMealData)
       for (let i=0;i<this.searchedMealData.length;i++) {
         if (this.searchedMealData[i].recipe_id == mealID) {
           fetch('http://localhost:3000/f2fi', {
@@ -76,11 +90,10 @@ export default {
             method: 'POST',
             body: JSON.stringify({'id': mealID})
           })
-          .then(function(response) {
+          .then(response => {
             return response.json()
           })
           .then(ingredients => {
-              console.log(ingredients)
               this.ingredientsToAddString = ''
               for (let j=0;j<ingredients.length;j++) {
                 if (j==0) {
@@ -93,42 +106,68 @@ export default {
                 instructionsURL: this.searchedMealData[i].source_url,
                 ingredients: this.ingredientsToAddString
               }
-              fetch('http://localhost:3000/', {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(this.mealToAdd)
-              })
-              .then(function(response) {
-                return response.json()
-              })
-              .then(response => {
-                return this.searchedMealData = response
-              })
-              .catch(function(error) {
-                console.log(error)
-              })
+              let yesDelete = confirm(`Are you sure you want to add ${this.searchedMealData[i].title} to your meals?`)
+              if (yesDelete) {
+                return fetch('http://localhost:3000/meals-table', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(this.mealToAdd)
+                  })
+                  .then(response => {
+                    return response.json()
+                  })
+                  .then(response => {
+                    let theMealId = response.meals.id.toString()
+                    let fetchURL = 'http://localhost:3000/users-table/' + this.currentUser.id
+                    this.putMealsToUser(fetchURL, theMealId)
+                  })
+                  .catch(function(error) {
+                    console.log(error)
+                  })
+              }
           })
           .catch(function(error) {
             console.log(error)
           })
-
         }
       }
+    },
+    putMealsToUser: function(fetchURL, theMealId) {
+      fetch(fetchURL)
+      .then(res => {
+          return res.json()
+      })
+      .then(res => {
+          let addMealToUser = this.currentUser.mealIDs + ',' + theMealId
+          let putThis = {'mealIDs': addMealToUser}
+          fetch(fetchURL, {
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              method: 'PUT',
+              body: JSON.stringify(putThis)
+          })
+          .then(function(response) {
+            return response.json()
+          })
+          .then(response => {
+            this.mealWasAdded()
+            return response
+          })
+          .catch(function(error) {
+            console.log(error)
+          })
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-/* .transition, #form button, #form .question label, #form .question input[type="text"] {
-  -moz-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
-  -o-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
-  -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
-  transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
-} */
 #form .question input[type="text"] {
   appearance: none;
   background-color: none;
