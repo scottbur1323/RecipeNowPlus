@@ -47,7 +47,7 @@ export default {
   width: 100vw;
   min-width: 100vw;
   max-width: 100%;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   min-height: 100vh;
   left:0px;
 }

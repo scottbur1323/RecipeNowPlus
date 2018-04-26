@@ -2,9 +2,10 @@
   <div id="home">
     <button id="logoutButton" @click="userLogout">Logout</button>
     <app-search-meals :mealsAPIdata="mealsAPIdata" :currentUser="currentUser" id="searchPage" v-show="showSearch" @goHome="leaveSearchPage($event)" @addedAMeal="refreshMeals($event)"></app-search-meals>
+    <app-grocery-list v-show="showGroceryList" @goHome="leaveSearchPage($event)" :selectedIngredients="selectedIngredients" :mealsToListIngredients="mealsToListIngredients"></app-grocery-list>
     <section v-show="showHome" class="wholeMealsSection">
       <div id="homeButtons">
-        <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
+        <button v-show="showMeals" @click="clickGroceryList">Grocery List</button>
         <button v-show="showMeals" @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
         <!-- <button v-show="showMeals" @click="showTheUpdates">Update Meal</button> -->
@@ -12,46 +13,47 @@
         <button v-show="showDeletes" @click="goHome">Go Back</button>
       </div>
       <section id="form" v-show="showMeals">
+        <h1 id="selectedCounter">{{ selectedMeals.length }}</h1>
         <h2>{{ currentUser.userName }}'s Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
-          <div v-for="meal in usersMealsArray">
-              <section id="meal.id" class="myMealCard" @click="clickMeal(meal.id)">
+          <div v-for="(meal, index) in usersMealsArray">
+              <section id="meal.id" class="myMealCard" @click="clickMeal(meal.id, $event)">
                 <img class="cardImage":src="meal.picURL">
                 <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
-        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
+        <!-- <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4> -->
       </section>
       <section id="form" v-show="showDeletes">
         <h2>{{ currentUser.userName }}'s Meals</h2>
-        <h3>Click Meals to add to Grocery List</h3>
+        <h3>Click a meal to delete it</h3>
         <div id="mealCardBox">
-          <div v-for="meal in usersMealsArray">
+          <div v-for="(meal,index) in usersMealsArray">
+            <h1>{{ index }}</h1>
               <section id="meal.id" class="myMealCard" @click="clickDelete(meal.id)" style="background-color: #DA9A98;">
                 <img class="cardImage":src="meal.picURL">
                 <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
-        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
       </section>
       <section id="form" v-show="showUpdates">
         <h2>{{ currentUser.userName }}'s Meals</h2>
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in usersMealsArray">
+
               <section id="meal.id" class="myMealCard" @click="clickUpdate(meal.id)" style="background-color: #8CADE5;">
                 <img class="cardImage":src="meal.picURL">
                 <p class="mealName">{{ meal.mealName }}</p>
               </section>
           </div>
         </div>
-        <h4 v-show="amountSelected">Meals Selected: {{ selectedMeals.length }}</h4>
       </section>
       <div id="homeButtons2">
-        <button v-show="showMeals" @click="goToGroceryList">Grocery List</button>
+        <button v-show="showMeals" @click="clickGroceryList">Grocery List</button>
         <button v-show="showMeals"  @click="showTheSearch">Search for Meals</button>
         <button v-show="showMeals" @click="showTheDeletes">Delete Meal</button>
         <!-- <button v-show="showMeals" @click="showTheUpdates">Update Meal</button> -->
@@ -64,19 +66,22 @@
 
 <script>
 import SearchMeals from './SearchMeals'
-
+import GroceryList from './GroceryList'
 
 export default {
   name: 'Home',
   data () {
     return {
       selectedMeals: [],
+      selectedIngredients: [],
+      mealsToListIngredients: [],
       amountSelected: false,
       showHome: true,
       showMeals: true,
       showDeletes: false,
       showUpdates: false,
       showSearch: false,
+      showGroceryList: false,
       shouldDelete: false,
       shouldUpdate: false,
       usersMealsArray: [],
@@ -113,21 +118,37 @@ export default {
     userLogout: function() {
       location.reload()
     },
-    clickMeal: function(mealID) {
+    clickMeal: function(mealID, event) {
       for (let i=0;i<this.selectedMeals.length;i++) {
         if (mealID == this.selectedMeals[i]) {
           this.selectedMeals.splice(i, 1)
           this.updateTotalSelected(event, mealID)
-          event.target.style.opacity = 1
-          console.log("Meal removed!")
+
+          //take away shade
+          this.rollbackOpacity(event)
+          // event.target.style.opacity = 1
+
           return
         }
       }
       this.selectedMeals.push(mealID)
-      event.target.style.opacity = 0.2
+
+      //add shade
+      this.makeOpacity(event)
+      // event.target.style.opacity = 0.2
+
       this.updateTotalSelected(event, mealID)
-      console.log("Meal added!")
       return
+    },
+    makeOpacity: function(event) {
+      if (event.target.localName == 'img' || event.target.localName == 'p') {
+          event.target.parentElement.style.opacity = 0.2
+      } else event.target.style.opacity = 0.2
+    },
+    rollbackOpacity: function(event) {
+      if (event.target.localName == 'img' || event.target.localName == 'p') {
+          event.target.parentElement.style.opacity = 1
+      } else event.target.style.opacity = 1
     },
     clickDelete: function(mealID) {
       this.shouldDelete = confirm("Are you sure you want to delete this meal?")
@@ -150,11 +171,20 @@ export default {
         this.amountSelected = false
       } else this.amountSelected = true
     },
-    goToGroceryList: function() {
+    clickGroceryList: function() {
       if (this.selectedMeals.length < 1) {
         alert("Please select at least one meal to make a grocery list!")
         return
       }
+      this.mealsToListIngredients = []
+      for (let i=0;i<this.selectedMeals.length;i++) {
+        for (let j=0;j<this.mealsAPIdata.length;j++) {
+          if (this.mealsAPIdata[j].id == this.selectedMeals[i]) {
+            this.mealsToListIngredients.push(this.mealsAPIdata[j])
+          }
+        }
+      }
+      this.showTheGroceryList()
     },
     actuallyDeleteMeal: function(mealID) {
       let newUserMealsArray = this.currentUser.mealIDs.split(',')
@@ -209,157 +239,350 @@ export default {
       this.showDeletes = false
     },
     showTheSearch: function () {
-      this.showHome = false,
+      this.showHome = false
+      this.showGroceryList = false
       this.showSearch = true
     },
     showTheHome: function() {
-      this.showHome = true
+      this.showGroceryList = false
       this.showSearch = false
+      this.showHome = true
+    },
+    showTheGroceryList: function() {
+      this.showHome = false
+      this.showSearch = false
+      this.showGroceryList = true
     }
   },
   components: {
-    appSearchMeals: SearchMeals
+    appSearchMeals: SearchMeals,
+    appGroceryList: GroceryList
   }
 }
 </script>
 
 <style scoped>
-#logoutButton {
-  position: fixed;
-  top: 20px;
-  right: 5vw;
-  width: 60px;
-  font-variant: small-caps;
-}
-* {
-  font-family: Helvetica, sans-serif;
-  font-weight: light;
-  -webkit-font-smoothing: antialiased;
-}
-h4 {
-  height: 30px;
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  justify-content: center;
-}
-h2 {
-  height: 30px;
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  justify-content: center;
-}
-#home {
-  display: flex;
-  justify-content: center;
-}
-section #form {
-  position: relative;
-  min-width: 100vw;
-  box-sizing: border-box;
-  padding: 5px 20px;
-  background-color: rgba(255,255,255,0.9);
-  border-width: thin;
-  border-color: rgba(255,255,255,1);
-  border-style: solid;
-  margin-bottom: 2vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#mealCardBox {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-button {
-  margin-top: 0px;
-  background-color: white;
-  border: 1px solid #ff4a56;
-  line-height: 0;
-  font-size: 14px;
-  font-weight: bold;
-  font-weight: 600;
-  display: inline-block;
-  box-sizing: border-box;
-  padding: 15px 5px;
-  border-radius: 60px;
-  color: #ff4a56;
-  font-weight: 100;
-  letter-spacing: 0.01em;
-  position: relative;
-  z-index: 1;
-  margin-left: 2px;
-  margin-right: 2px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  width: 120px;
+/* DESKTOP */
+@media screen and (min-width: 701px) {
+  h1 {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 20px;
+    padding-top: 0px;
+    color: white;
+    font-size: 79px;
+  }
+  #selectedCounter {
+    position: absolute;
+    margin-top: 2px;
+    padding-top: 0px;
+    color: white;
+    font-size: 79px;
+    left: 4vw;
+    top: 0;
+  }
+  #logoutButton {
+    position: fixed;
+    top: 12px;
+    right: 5vw;
+    width: 60px;
+    font-variant: small-caps;
+  }
+  * {
+    font-family: Helvetica, sans-serif;
+    font-weight: light;
+    -webkit-font-smoothing: antialiased;
+  }
+  h3 {
+    font-size: 15px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    color: #B42B32;
+    padding-bottom: 5px;
+  }
+  h2 {
+    font-size: 40px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding-bottom: 10px;
+  }
+  #home {
+    display: flex;
+    justify-content: center;
+  }
+  section #form {
+    position: relative;
+    max-width: 80vw;
+    min-width: 80vw;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    background-color: rgba(125,125,125,.8);
+    border-width: thin;
+    border-color: rgba(255,255,255,1);
+    border-style: solid;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    justify-content: center;
+  }
+  #mealCardBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+    background-color: white;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 14px;
+    font-weight: bold;
+    font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 15px 5px;
+    border-radius: 60px;
+    color: #ED585C;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 120px;
 
+  }
+  button:hover, button:focus {
+    color: white;
+    background-color: #ff4a56;
+  }
+  .cardImage {
+    width: 105px;
+    height: 65px;
+    border-radius: 6px;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    margin-top: -2px;
+  }
+  .myMealCard {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FBFBFB;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    width: 105px;
+    height: 130px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 10px;
+  }
+  .myMealCard:hover {
+    background-color: #ED585C;
+    color:white;
+    cursor: pointer;
+  }
+  p {
+    text-align: center;
+  }
+  #homeButtons {
+    max-width: 100vw;
+    min-width: 310px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+  #homeButtons2 {
+    width: 100vw;
+    min-width: 310px;
+    margin-bottom: 130px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+  #searchPage {
+    padding-bottom: 120px;
+  }
+  .mealName {
+    text-align: center;
+    font-size: 14px;
+  }
+  .wholeMealsSection {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
 }
-button:hover, button:focus {
-  color: white;
-  background-color: #ff4a56;
-}
-.cardImage {
-  width: 105px;
-  height: 65px;
-  border-radius: 6px;
-  border-style: solid;
-  border-width: thin;
-  border-color: #BD292C;
-  margin-top: -2px;
-}
-.myMealCard {
-  display: flex;
-  flex-direction: column;
-  justify-content:flex-start;
-  align-items: center;
-  border-radius: 15px;
-  background-color: #FBFBFB;
-  border-style: solid;
-  border-width: thin;
-  border-color: #BD292C;
-  width: 105px;
-  height: 130px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  margin: 10px;
-  box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
-}
-p {
-  text-align: center;
-}
-h3 {
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-}
-#homeButtons {
-  max-width: 100vw;
-  min-width: 310px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-}
-#homeButtons2 {
-  width: 100vw;
-  min-width: 310px;
-  margin-bottom: 130px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-}
-#searchPage {
-  padding-bottom: 120px;
-}
-.mealName {
-  text-align: center;
-  font-size: 14px;
+/* MOBILE */
+@media screen and (max-width: 700px) {
+  #logoutButton {
+    position: fixed;
+    top: 18px;
+    right: 5vw;
+    width: 60px;
+    font-variant: small-caps;
+  }
+  * {
+    font-family: Helvetica, sans-serif;
+    font-weight: light;
+    -webkit-font-smoothing: antialiased;
+  }
+  h4 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  h2 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    color: black;
+  }
+  #home {
+    display: flex;
+    justify-content: center;
+  }
+  section #form {
+    position: relative;
+    min-width: 100vw;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    border-width: medium;
+    border-color: rgba(255,255,255,1);
+    border-style: solid;
+    margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(125,125,125,.8);
+
+    border-radius: 10px;
+  }
+  #mealCardBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    margin-top: 0px;
+    background-color: white;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 14px;
+    font-weight: bold;
+    font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 15px 5px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 120px;
+
+  }
+  button:hover, button:focus {
+    color: white;
+    background-color: #ff4a56;
+  }
+  .cardImage {
+    width: 105px;
+    height: 65px;
+    border-radius: 6px;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    margin-top: -2px;
+  }
+  .myMealCard {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FBFBFB;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    width: 105px;
+    height: 130px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 10px;
+    /* box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey; */
+  }
+  .myMealCard:hover {
+    /* box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black; */
+    background-color: #ED585C;
+    color:white;
+  }
+  p {
+    text-align: center;
+  }
+  h3 {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    color: white;
+  }
+  #homeButtons {
+    max-width: 100vw;
+    min-width: 310px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+  #homeButtons2 {
+    width: 100vw;
+    min-width: 310px;
+    margin-bottom: 130px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+  #searchPage {
+    padding-bottom: 120px;
+  }
+  .mealName {
+    text-align: center;
+    font-size: 14px;
+  }
+  .wholeMealsSection {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
 }
 </style>

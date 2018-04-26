@@ -18,7 +18,7 @@
           <button @click="checkTheUser" v-show="loginInfo">Login</button>
           <button v-show="loginInfo" @click="goToNewUserPage">Create Account</button>
         </div>
-        <p v-show="loginCheck">You hace successfully logged in!</p>
+        <p v-show="loginCheck">You have successfully logged in!</p>
         <p v-show="imposter">IMPOSTER!  Username and/or password don't exist or don't match!</p>
       </section>
     </section>

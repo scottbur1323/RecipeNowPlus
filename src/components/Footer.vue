@@ -20,14 +20,20 @@ export default {
   width: 100%;
   height: 25px;
   position: fixed;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255,255,255,1);
   bottom: 5px;
   padding-bottom: 4px;
+  border-color: rgba(150,150,150,0.6);
+  border-style: solid;
+  border-width: thin;
+
 }
 #copyright {
   padding-left: 10px;
   font-size: 12px;
-  color: grey;
+  color: rgba(100,100,100,1);
+  margin-top: 8px;
+  text-align: left;
 }
 * {
   font-family: Helvetica, sans-serif;

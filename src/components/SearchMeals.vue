@@ -96,9 +96,18 @@ export default {
           .then(ingredients => {
               this.ingredientsToAddString = ''
               for (let j=0;j<ingredients.length;j++) {
+                let cleanIngredient = ''
                 if (j==0) {
-                  this.ingredientsToAddString = ingredients[0]
-                } else this.ingredientsToAddString = this.ingredientsToAddString + ", " + ingredients[j]
+                  if (ingredients[0].includes('&')) {
+                    cleanIngredient = ingredients[0].splice(ingredients[0].indexOf('&'), ingredients[0].indexOf('&') - ingredients[0].indexOf(';'))
+                    this.ingredientsToAddString = cleanIngredient
+                  } else this.ingredientsToAddString = ingredients[0]
+                } else {
+                  if (ingredients[j].includes('&')) {
+                    cleanIngredient = ingredients[j].splice(ingredients[j].indexOf('&'), ingredients[j].indexOf('&') - ingredients[j].indexOf(';'))
+                    this.ingredientsToAddString = cleanIngredient
+                  } else this.ingredientsToAddString = this.ingredientsToAddString + "$" + ingredients[j]
+                }
               }
               this.mealToAdd = {
                 mealName: this.searchedMealData[i].title,
@@ -127,7 +136,7 @@ export default {
                   .catch(function(error) {
                     console.log(error)
                   })
-              }
+              } else alert(`${this.searchedMealData[i].title} was not added to your meals.`)
           })
           .catch(function(error) {
             console.log(error)
@@ -168,150 +177,316 @@ export default {
 </script>
 
 <style scoped>
-#form .question input[type="text"] {
-  appearance: none;
-  background-color: none;
-  border: 1px solid #ff4a56;
-  line-height: 0;
-  font-size: 17px;
-  max-width: 110px;
-  max-height: 10px;
-  padding: 10px 15px;
-  border-radius: 60px;
-  color: #ff4a56;
-  font-weight: 100;
-  letter-spacing: 0.01em;
-  z-index: 1;
-}
-#form .question input[type="text"]:focus {
-  outline: none;
-  background: #ff4a56;
-  color: white;
-}
-* {
-  font-family: Helvetica, sans-serif;
-  font-weight: light;
-  -webkit-font-smoothing: antialiased;
-}
-h4 {
-  height: 30px;
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  justify-content: center;
-}
-h2 {
-  height: 30px;
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  justify-content: center;
-}
-#home {
-  display: flex;
-  justify-content: center;
-}
-section #form {
-  position: relative;
-  min-width: 100vw;
-  box-sizing: border-box;
-  padding: 5px 20px;
-  background-color: rgba(255,255,255,0.8);
-  border-width: thin;
-  border-color: rgba(255,255,255,1);
-  border-style: solid;
-  margin-bottom: 2vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#mealCardBox {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-button {
-  margin-top: 0px;
-  background-color: white;
-  border: 1px solid #ff4a56;
-  line-height: 0;
-  font-size: 14px;
-  font-weight: bold;
-  font-weight: 600;
-  display: inline-block;
-  box-sizing: border-box;
-  padding: 15px 5px;
-  border-radius: 60px;
-  color: #ff4a56;
-  font-weight: 100;
-  letter-spacing: 0.01em;
-  position: relative;
-  z-index: 1;
-  margin-left: 2px;
-  margin-right: 2px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  width: 120px;
+/* DESKTOP */
+@media screen and (min-width: 701px) {
+  #form .question input[type="text"] {
+    appearance: none;
+    background-color: none;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 17px;
+    max-width: 110px;
+    max-height: 10px;
+    padding: 10px 15px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    z-index: 1;
+  }
+  #form .question input[type="text"]:focus {
+    outline: none;
+    background: #ff4a56;
+    color: white;
+  }
+  * {
+    font-family: Helvetica, sans-serif;
+    font-weight: light;
+    -webkit-font-smoothing: antialiased;
+  }
+  h4 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  h2 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  #home {
+    display: flex;
+    justify-content: center;
+  }
+  section #form {
+    position: relative;
+    min-width: 100vw;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    background-color: rgba(255,255,255,0.8);
+    border-width: thin;
+    border-color: rgba(255,255,255,1);
+    border-style: solid;
+    margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #mealCardBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    margin-top: 0px;
+    background-color: white;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 14px;
+    font-weight: bold;
+    font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 15px 5px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 120px;
 
+  }
+  button:hover, button:focus {
+    color: white;
+    background-color: #ff4a56;
+  }
+  .cardImage {
+    width: 105px;
+    min-height: 65px;
+    max-height: 65px;
+    border-radius: 6px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #BD292C;
+    margin-top: -2px;
+  }
+  .myMealCard {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FBFBFB;
+    border-style: solid;
+    border-width: thin;
+    border-color: #BD292C;
+    width: 105px;
+    height: 130px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 10px;
+    box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
+  }
+  .myMealCard:hover {
+    box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black;
+    background-color: #ED585C;
+    color:white;
+    cursor: pointer;
+  }
+
+  .mealName {
+    text-align: center;
+    font-size: 11px;
+  }
+  h3 {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+  }
+  #homeButtons {
+    max-width: 100vw;
+    min-width: 310px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+  #homeButtons2 {
+    width: 100vw;
+    min-width: 310px;
+    margin-bottom: 130px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
 }
-button:hover, button:focus {
-  color: white;
-  background-color: #ff4a56;
-}
-.cardImage {
-  width: 105px;
-  min-height: 65px;
-  max-height: 65px;
-  border-radius: 6px;
-  border-style: solid;
-  border-width: thin;
-  border-color: #BD292C;
-  margin-top: -2px;
-}
-.myMealCard {
-  display: flex;
-  flex-direction: column;
-  justify-content:flex-start;
-  align-items: center;
-  border-radius: 15px;
-  background-color: #FBFBFB;
-  border-style: solid;
-  border-width: thin;
-  border-color: #BD292C;
-  width: 105px;
-  height: 130px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  margin: 10px;
-  box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
-}
-.mealName {
-  text-align: center;
-  font-size: 11px;
-}
-h3 {
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-}
-#homeButtons {
-  max-width: 100vw;
-  min-width: 310px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-}
-#homeButtons2 {
-  width: 100vw;
-  min-width: 310px;
-  margin-bottom: 130px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
+/* MOBILE */
+@media screen and (max-width: 700px) {
+  #form .question input[type="text"] {
+    appearance: none;
+    background-color: none;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 17px;
+    max-width: 110px;
+    max-height: 10px;
+    padding: 10px 15px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    z-index: 1;
+  }
+  #form .question input[type="text"]:focus {
+    outline: none;
+    background: #ff4a56;
+    color: white;
+  }
+  * {
+    font-family: Helvetica, sans-serif;
+    font-weight: light;
+    -webkit-font-smoothing: antialiased;
+  }
+  h4 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  h2 {
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  #home {
+    display: flex;
+    justify-content: center;
+  }
+  section #form {
+    position: relative;
+    min-width: 100vw;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    background-color: rgba(255,255,255,0.8);
+    border-width: thin;
+    border-color: rgba(255,255,255,1);
+    border-style: solid;
+    margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #mealCardBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    margin-top: 0px;
+    background-color: white;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 14px;
+    font-weight: bold;
+    font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 15px 5px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 120px;
+
+  }
+  button:hover, button:focus {
+    color: white;
+    background-color: #ff4a56;
+  }
+  .cardImage {
+    width: 105px;
+    min-height: 65px;
+    max-height: 65px;
+    border-radius: 6px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #BD292C;
+    margin-top: -2px;
+  }
+  .myMealCard {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #FBFBFB;
+    border-style: solid;
+    border-width: thin;
+    border-color: #BD292C;
+    width: 105px;
+    height: 130px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 10px;
+    box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
+  }
+  .myMealCard:hover {
+    box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black;
+    background-color: #ED585C;
+    color:white;
+    cursor: pointer;
+  }
+
+  .mealName {
+    text-align: center;
+    font-size: 11px;
+  }
+  h3 {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+  }
+  #homeButtons {
+    max-width: 100vw;
+    min-width: 310px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+  #homeButtons2 {
+    width: 100vw;
+    min-width: 310px;
+    margin-bottom: 130px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
 }
 </style>
