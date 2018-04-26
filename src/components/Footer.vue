@@ -26,6 +26,8 @@ export default {
   border-color: rgba(150,150,150,0.6);
   border-style: solid;
   border-width: thin;
+  border-left: none;
+  border-right: none;
 
 }
 #copyright {

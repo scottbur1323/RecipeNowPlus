@@ -122,7 +122,8 @@ export default {
       this.$emit('goHome')
     },
     addTheNewUserToDB: function(userName, password) {
-      fetch('http://localhost:3000/users-table', {
+      // fetch('http://localhost:3000/users-table', {
+      fetch('https://recipe-now-server-heroku.herokuapp.com/users-table/', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

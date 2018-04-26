@@ -15,7 +15,7 @@
       <section id="form" v-show="showMeals">
         <h1 id="selectedCounter">{{ selectedMeals.length }}</h1>
         <h2>{{ currentUser.userName }}'s Meals</h2>
-        <h3>Click Meals to add to Grocery List</h3>
+        <h3>Click a meal to add to List</h3>
         <div id="mealCardBox">
           <div v-for="(meal, index) in usersMealsArray">
               <section id="meal.id" class="myMealCard" @click="clickMeal(meal.id, $event)">
@@ -196,7 +196,8 @@ export default {
               newUserMealsString = newUserMealsArray[i]
           } else newUserMealsString = newUserMealsString + ',' + newUserMealsArray[i]
       }
-      let deleteUrl = 'http://localhost:3000/users-table/' + this.currentUser.id
+      // let deleteUrl = 'http://localhost:3000/users-table/' + this.currentUser.id
+      let deleteUrl = 'https://recipe-now-server-heroku.herokuapp.com/users-table/' + this.currentUser.id
       fetch(deleteUrl, {
         headers: {
             'Accept': 'application/json',
@@ -430,6 +431,17 @@ export default {
 }
 /* MOBILE */
 @media screen and (max-width: 700px) {
+  #selectedCounter {
+      visibility: hidden;
+  }
+  h1 {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 20px;
+    padding-top: 0px;
+    color: white;
+    font-size: 79px;
+  }
   #logoutButton {
     position: fixed;
     top: 18px;
@@ -448,14 +460,15 @@ export default {
     padding: 0px;
     display: flex;
     justify-content: center;
+    color: #B42B32;
   }
   h2 {
-    height: 30px;
+    font-size: 30px;
     margin: 0px;
     padding: 0px;
     display: flex;
     justify-content: center;
-    color: black;
+    color: white;
   }
   #home {
     display: flex;
@@ -535,10 +548,8 @@ export default {
     overflow-y: hidden;
     overflow-x: hidden;
     margin: 10px;
-    /* box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey; */
   }
   .myMealCard:hover {
-    /* box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black; */
     background-color: #ED585C;
     color:white;
   }
@@ -546,10 +557,11 @@ export default {
     text-align: center;
   }
   h3 {
-    font-size: 12px;
+    font-size: 18px;
     display: flex;
     justify-content: center;
-    color: white;
+    color: #B42B32;
+    margin-bottom: 1vh;
   }
   #homeButtons {
     max-width: 100vw;

@@ -59,7 +59,8 @@ export default {
       this.$emit('addedAMeal')
     },
     searchForRecipes: function() {
-      fetch('http://localhost:3000/f2f', {
+      // fetch('http://localhost:3000/f2f', {
+      fetch('https://recipe-now-server-heroku.herokuapp.com/f2f', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -82,7 +83,8 @@ export default {
       console.log(this.searchedMealData)
       for (let i=0;i<this.searchedMealData.length;i++) {
         if (this.searchedMealData[i].recipe_id == mealID) {
-          fetch('http://localhost:3000/f2fi', {
+          // fetch('http://localhost:3000/f2fi', {
+          fetch('https://recipe-now-server-heroku.herokuapp.com/f2fi', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -117,7 +119,8 @@ export default {
               }
               let yesDelete = confirm(`Are you sure you want to add ${this.searchedMealData[i].title} to your meals?`)
               if (yesDelete) {
-                return fetch('http://localhost:3000/meals-table', {
+                // return fetch('http://localhost:3000/meals-table', {
+                return fetch('https://recipe-now-server-heroku.herokuapp.com/meals-table', {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
@@ -130,7 +133,8 @@ export default {
                   })
                   .then(response => {
                     let theMealId = response.meals.id.toString()
-                    let fetchURL = 'http://localhost:3000/users-table/' + this.currentUser.id
+                    // let fetchURL = 'http://localhost:3000/users-table/' + this.currentUser.id
+                    let fetchURL = 'https://recipe-now-server-heroku.herokuapp.com/users-table/' + this.currentUser.id
                     this.putMealsToUser(fetchURL, theMealId)
                   })
                   .catch(function(error) {
@@ -204,19 +208,23 @@ export default {
     font-weight: light;
     -webkit-font-smoothing: antialiased;
   }
-  h4 {
-    height: 30px;
+  h3 {
+    font-size: 15px;
     margin: 0px;
     padding: 0px;
     display: flex;
     justify-content: center;
+    color: #B42B32;
+    padding-bottom: 5px;
   }
   h2 {
-    height: 30px;
+    font-size: 40px;
     margin: 0px;
     padding: 0px;
     display: flex;
     justify-content: center;
+    color: white;
+    padding-bottom: 10px;
   }
   #home {
     display: flex;
@@ -224,17 +232,19 @@ export default {
   }
   section #form {
     position: relative;
-    min-width: 100vw;
+    max-width: 80vw;
+    min-width: 80vw;
     box-sizing: border-box;
     padding: 5px 20px;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(125,125,125,.8);
     border-width: thin;
     border-color: rgba(255,255,255,1);
     border-style: solid;
-    margin-bottom: 2vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    border-radius: 10px;
+    justify-content: center;
+    align-items:center;
   }
   #mealCardBox {
     display: flex;
@@ -243,7 +253,8 @@ export default {
     flex-wrap: wrap;
   }
   button {
-    margin-top: 0px;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
     background-color: white;
     border: 1px solid #ff4a56;
     line-height: 0;
@@ -254,15 +265,13 @@ export default {
     box-sizing: border-box;
     padding: 15px 5px;
     border-radius: 60px;
-    color: #ff4a56;
+    color: #ED585C;
     font-weight: 100;
     letter-spacing: 0.01em;
     position: relative;
     z-index: 1;
     margin-left: 2px;
     margin-right: 2px;
-    margin-top: 5px;
-    margin-bottom: 5px;
     width: 120px;
 
   }
@@ -272,12 +281,11 @@ export default {
   }
   .cardImage {
     width: 105px;
-    min-height: 65px;
-    max-height: 65px;
+    height: 65px;
     border-radius: 6px;
     border-style: solid;
     border-width: thin;
-    border-color: #BD292C;
+    border-color: black;
     margin-top: -2px;
   }
   .myMealCard {
@@ -289,16 +297,14 @@ export default {
     background-color: #FBFBFB;
     border-style: solid;
     border-width: thin;
-    border-color: #BD292C;
+    border-color: black;
     width: 105px;
     height: 130px;
     overflow-y: hidden;
     overflow-x: hidden;
     margin: 10px;
-    box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
   }
   .myMealCard:hover {
-    box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black;
     background-color: #ED585C;
     color:white;
     cursor: pointer;
@@ -307,11 +313,6 @@ export default {
   .mealName {
     text-align: center;
     font-size: 11px;
-  }
-  h3 {
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
   }
   #homeButtons {
     max-width: 100vw;
@@ -360,19 +361,23 @@ export default {
     font-weight: light;
     -webkit-font-smoothing: antialiased;
   }
-  h4 {
-    height: 30px;
+  h3 {
+    font-size: 15px;
     margin: 0px;
     padding: 0px;
     display: flex;
     justify-content: center;
+    color: #B42B32;
+    padding-bottom: 5px;
   }
   h2 {
-    height: 30px;
+    font-size: 40px;
     margin: 0px;
     padding: 0px;
     display: flex;
     justify-content: center;
+    color: white;
+    padding-bottom: 10px;
   }
   #home {
     display: flex;
@@ -383,14 +388,15 @@ export default {
     min-width: 100vw;
     box-sizing: border-box;
     padding: 5px 20px;
-    background-color: rgba(255,255,255,0.8);
-    border-width: thin;
+    border-width: medium;
     border-color: rgba(255,255,255,1);
     border-style: solid;
     margin-bottom: 2vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgba(125,125,125,.8);
+    border-radius: 10px;
   }
   #mealCardBox {
     display: flex;
@@ -399,7 +405,8 @@ export default {
     flex-wrap: wrap;
   }
   button {
-    margin-top: 0px;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
     background-color: white;
     border: 1px solid #ff4a56;
     line-height: 0;
@@ -417,8 +424,6 @@ export default {
     z-index: 1;
     margin-left: 2px;
     margin-right: 2px;
-    margin-top: 5px;
-    margin-bottom: 5px;
     width: 120px;
 
   }
@@ -428,12 +433,11 @@ export default {
   }
   .cardImage {
     width: 105px;
-    min-height: 65px;
-    max-height: 65px;
+    height: 65px;
     border-radius: 6px;
     border-style: solid;
     border-width: thin;
-    border-color: #BD292C;
+    border-color: black;
     margin-top: -2px;
   }
   .myMealCard {
@@ -445,16 +449,14 @@ export default {
     background-color: #FBFBFB;
     border-style: solid;
     border-width: thin;
-    border-color: #BD292C;
+    border-color: black;
     width: 105px;
     height: 130px;
     overflow-y: hidden;
     overflow-x: hidden;
     margin: 10px;
-    box-shadow: 0 0 15px white, 0 0 10px grey, 3px 0 3px grey;
   }
   .myMealCard:hover {
-    box-shadow: 0 0 5px white, 0 0 20px red, 0 0 5px black;
     background-color: #ED585C;
     color:white;
     cursor: pointer;
@@ -463,11 +465,6 @@ export default {
   .mealName {
     text-align: center;
     font-size: 11px;
-  }
-  h3 {
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
   }
   #homeButtons {
     max-width: 100vw;

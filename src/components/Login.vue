@@ -33,8 +33,10 @@ export default {
   name: 'Login',
   data () {
     return {
-      mealsAPI: 'http://localhost:3000/meals-table/',
-      usersAPI: 'http://localhost:3000/users-table/',
+      // mealsAPI: 'http://localhost:3000/meals-table/',
+      // usersAPI: 'http://localhost:3000/users-table/',
+      mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table/'
+      usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table/'
       mealsAPIdata: '',
       usersAPIdata: '',
       userNameInput: '',
