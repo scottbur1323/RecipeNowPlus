@@ -65,10 +65,12 @@ export default {
     -webkit-font-smoothing: antialiased;
   }
   h4 {
-    height: 30px;
     margin: 0px;
     padding: 0px;
+    padding-top: 4px;
+    padding-right: 5px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
   h2 {
