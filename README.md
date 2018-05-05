@@ -1,21 +1,8 @@
-# recipe-now-plus
-
-> A web app that accepts recipes in to a database so the user can quickly compile shopping lists based on the meals they want to eat.
-
+# Recipe Now!
+ - A full-stack web application where the user selects meals they would like to make and let Recipe Now! write your shopping list for you.
+ - Go to the deployed site: https://recipe-now-app.firebaseapp.com/
+ - Go to the server code: https://github.com/scottbur1323/RecipeNowPlusServer/
+  
 ## Build Setup
+ -A full-stack web app using Vue.js, Node.js, Express, Knex.js, PostgreSQL and Heroku.
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
