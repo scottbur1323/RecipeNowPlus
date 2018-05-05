@@ -448,6 +448,7 @@ export default {
     right: 5vw;
     width: 60px;
     font-variant: small-caps;
+    z-index: 2;
   }
   * {
     font-family: Helvetica, sans-serif;

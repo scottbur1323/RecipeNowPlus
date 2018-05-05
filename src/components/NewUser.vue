@@ -47,7 +47,7 @@ export default {
   methods: {
     checkNewUser: function() {
       if (this.createPasswordInput == this.createPasswordCheckInput) {
-        var self = this
+        let self = this
         if (this.checkForHackers(this.createPasswordInput, this.createNameInput)) {
             if (this.checkForExistingUser(this.createNameInput)) {
               let areYouSure = confirm(`Are you sure you want to create the user: ${this.createNameInput}`)

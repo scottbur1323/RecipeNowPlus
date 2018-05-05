@@ -11,6 +11,9 @@
             <aside id="asidePicAndName">
               <img class="cardImage" :src="meal.picURL">
               <h4>{{ meal.mealName }}</h4>
+              <a :href="meal.instructionsURL" target="_blank">
+                <p>Go To Instructions</p>
+              </a>
             </aside>
           </div>
           <div id="eachIngredient">
@@ -39,6 +42,7 @@ export default {
   methods: {
     passItUp: function() {
       this.$emit('goHome')
+      console.log(this.mealsToListIngredients);
     },
   }
 }
