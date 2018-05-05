@@ -9,10 +9,10 @@
         <div id="column" class="eachMeal" v-for="meal in mealsToListIngredients">
           <div id="row" class="picAndName">
             <aside id="asidePicAndName">
-              <img class="cardImage" :src="meal.picURL">
-              <h4>{{ meal.mealName }}</h4>
+                <img class="cardImage" :src="meal.picURL">
+                <h4>{{ meal.mealName }}</h4>
               <a :href="meal.instructionsURL" target="_blank">
-                <p>Go To Instructions</p>
+                <h4>Go To Instructions</h4>
               </a>
             </aside>
           </div>
@@ -219,10 +219,11 @@ export default {
     -webkit-font-smoothing: antialiased;
   }
   h4 {
-    height: 30px;
     margin: 0px;
-    padding: 0px;
+    padding-top: 4px;
+    padding-right: 5px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
   h2 {
@@ -285,8 +286,8 @@ export default {
     background-color: #ff4a56;
   }
   .cardImage {
-    width: 105px;
-    height: 65px;
+    max-width: 25vw;
+    /* height: 65px; */
     border-radius: 6px;
     border-style: solid;
     border-width: thin;

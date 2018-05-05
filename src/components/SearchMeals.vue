@@ -100,12 +100,12 @@ export default {
               for (let j=0;j<ingredients.length;j++) {
                 let cleanIngredient = ''
                 if (j==0) {
-                  if (ingredients[0].includes('&')) {
+                  if (ingredients[0].includes('&') && ingredients[0].includes('&')) {
                     cleanIngredient = ingredients[0].splice(ingredients[0].indexOf('&'), ingredients[0].indexOf('&') - ingredients[0].indexOf(';'))
                     this.ingredientsToAddString = cleanIngredient
                   } else this.ingredientsToAddString = ingredients[0]
                 } else {
-                  if (ingredients[j].includes('&')) {
+                  if (ingredients[j].includes('&') && ingredients[j].includes(';')) {
                     cleanIngredient = ingredients[j].splice(ingredients[j].indexOf('&'), ingredients[j].indexOf('&') - ingredients[j].indexOf(';'))
                     this.ingredientsToAddString = cleanIngredient
                   } else this.ingredientsToAddString = this.ingredientsToAddString + "$" + ingredients[j]
