@@ -44,7 +44,6 @@
         <h3>Click Meals to add to Grocery List</h3>
         <div id="mealCardBox">
           <div v-for="meal in usersMealsArray">
-
               <section id="meal.id" class="myMealCard" @click="clickUpdate(meal.id)" style="background-color: #8CADE5;">
                 <img class="cardImage":src="meal.picURL">
                 <p class="mealName">{{ meal.mealName }}</p>
@@ -123,20 +122,12 @@ export default {
         if (mealID == this.selectedMeals[i]) {
           this.selectedMeals.splice(i, 1)
           this.updateTotalSelected(event, mealID)
-
-          //take away shade
           this.rollbackOpacity(event)
-          // event.target.style.opacity = 1
-
           return
         }
       }
       this.selectedMeals.push(mealID)
-
-      //add shade
       this.makeOpacity(event)
-      // event.target.style.opacity = 0.2
-
       this.updateTotalSelected(event, mealID)
       return
     },

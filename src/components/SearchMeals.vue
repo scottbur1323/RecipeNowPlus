@@ -80,7 +80,6 @@ export default {
     },
     addToMyMeals: function(mealID) {
       this.mealIdToAdd = mealID
-      console.log(this.searchedMealData)
       for (let i=0;i<this.searchedMealData.length;i++) {
         if (this.searchedMealData[i].recipe_id == mealID) {
           // fetch('http://localhost:3000/f2fi', {

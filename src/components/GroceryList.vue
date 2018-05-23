@@ -42,7 +42,6 @@ export default {
   methods: {
     passItUp: function() {
       this.$emit('goHome')
-      console.log(this.mealsToListIngredients);
     },
   }
 }
@@ -289,7 +288,6 @@ export default {
   }
   .cardImage {
     max-width: 25vw;
-    /* height: 65px; */
     border-radius: 6px;
     border-style: solid;
     border-width: thin;
