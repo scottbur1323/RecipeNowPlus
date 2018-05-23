@@ -130,8 +130,8 @@ export default {
         },
         method: 'POST',
         body: JSON.stringify({
-          "userName": userName,
-          "password": password,
+          "userName": userName.toLowerCase(),
+          "password": password.toLowerCase(),
           "mealIDs":"1,2,3",
           "savedLists":"",
           "justInCase":""
