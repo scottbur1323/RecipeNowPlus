@@ -14,7 +14,7 @@
         <div class="question">
           <input type="text" v-model="createPasswordCheckInput" @keyup.enter="checkNewUser()" required/>
           <label>Password Confirm</label>
-          <p v-show="passwordsDontMatch">Passwords don't match!</p>
+          <p v-show="passwordsDontMatch">Passwords do not match!</p>
           <p v-show="creatingUser">Creating user...</p>
           <p v-show="userNameAlreadyExists">Username already exists</p>
           <p v-show="noSpecialCharacters">Cannot use any special characters</p>
