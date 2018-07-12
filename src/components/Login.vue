@@ -34,9 +34,9 @@ export default {
   data () {
     return {
       // mealsAPI: 'http://localhost:3000/meals-table/',
-      // usersAPI: 'http://localhost:3000/users-table/',
+      usersAPI: 'http://localhost:3000/users-table/',
       mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table/',
-      usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table/',
+      // usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table/',
       mealsAPIdata: '',
       usersAPIdata: '',
       userNameInput: '',
@@ -64,14 +64,15 @@ export default {
   },
   methods: {
     hitThatAPI: function() {
-
-      fetch('https://recipe-now-server-heroku.herokuapp.com/users-table/checker', {
+      console.log("hello")
+      let poop = document.location.href
+      fetch(`${this.usersAPI}checker`, {
           headers: {
-              'Accept': 'text/HTML',
-              'Content-Type': 'text/HTML'
+              'Accept': 'application/JSON',
+              'Content-Type': 'application/JSON'
           },
           method: 'POST',
-          body: document.location.href
+          body: {poop}
         })
         .then(response => {
           return response.json()
