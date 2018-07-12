@@ -64,6 +64,21 @@ export default {
   },
   methods: {
     hitThatAPI: function() {
+
+      fetch('https://recipe-now-server-heroku.herokuapp.com/users-table/checker', {
+          headers: {
+              'Accept': 'text/HTML',
+              'Content-Type': 'text/HTML'
+          },
+          method: 'POST',
+          body: document.location.href
+        })
+        .then(response => {
+          return response.json()
+        })
+        .then(response => {
+          console.log(response)
+        })
       fetch(this.usersAPI)
       .then(res => {
           return res.json()
