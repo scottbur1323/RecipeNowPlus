@@ -33,10 +33,10 @@ export default {
   name: 'Login',
   data () {
     return {
-      // mealsAPI: 'http://localhost:3000/meals-table/',
-      // usersAPI: 'http://localhost:3000/users-table/',
-      mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table/',
-      usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table/',
+      mealsAPI: 'http://localhost:3000/meals-table/',
+      usersAPI: 'http://localhost:3000/users-table/',
+      // mealsAPI: 'https://recipe-now-server-heroku.herokuapp.com/meals-table/',
+      // usersAPI: 'https://recipe-now-server-heroku.herokuapp.com/users-table/',
       mealsAPIdata: '',
       usersAPIdata: '',
       userNameInput: '',
@@ -63,6 +63,20 @@ export default {
     }
   },
   methods: {
+
+
+    // THIS IS THE SHIT
+    // {
+    // domain: 'chancescottburke.auth0.com',
+    // clientID: 'crsBXv2eLLab9MjXwYzpe9lUX1uf2TL1',
+    // redirectUri: 'http://localhost:3000/callback',
+    // audience: 'https://chancescottburke.auth0.com/userinfo',
+    // responseType: 'token id_token',
+    // scope: 'openid'
+    // }
+
+
+
     hitThatAPI: function() {
       fetch(this.usersAPI)
         .then(response => {
