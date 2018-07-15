@@ -1,22 +1,35 @@
 <template>
   <div id="footer">
     <p id="copyright">{{ msg }}</p>
+    <button id="show-modal" @click="showModal = true">Info</button>
+    <modal :showModal="showModal" v-if="showModal" @close="showModal = false" >
+      <h3 slot="header">custom header</h3>
+    </modal>
   </div>
 </template>
 
 <script>
+import modal from './modal'
+
 export default {
   name: 'Footer',
   data () {
     return {
-      msg: 'Copyright 2018 Chance Scott-Burke'
+      msg: 'Copyright 2018 Chance Scott-Burke',
+      showModal: false
     }
+  },
+  components: {
+    modal: modal
   }
 }
 </script>
 
 <style scoped>
 #footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   height: 25px;
   position: fixed;
@@ -41,5 +54,10 @@ export default {
   font-family: Helvetica, sans-serif;
   font-weight: light;
   -webkit-font-smoothing: antialiased;
+}
+#show-modal {
+  display: flex;
+  justify-content: center;
+
 }
 </style>

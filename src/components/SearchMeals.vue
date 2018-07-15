@@ -10,7 +10,8 @@
           <input v-model="userSearchData" @keyup.enter="searchForRecipes" type="text" required/>
         </div>
         <button @click="searchForRecipes">Search</button>
-        <h3>Click Meals to add to Add to Saved Meals</h3>
+        <h3 v-show="noMeals">No Meals Found, Please Try Again!</h3>
+        <h3 v-show="!noMeals">Click Meals to add to Add to Saved Meals</h3>
         <div id="mealCardBox">
           <div v-for="meal in searchedMealData">
               <section id="meal.recipe_id" class="myMealCard" @click="addToMyMeals(meal.recipe_id)">
@@ -38,7 +39,8 @@ export default {
       ingredientsToAddArray: [],
       ingredientsToAddString: '',
       mealIdToAdd: 0,
-      mealToAdd: {}
+      mealToAdd: {},
+      noMeals: false
     }
   },
   props: ['mealsAPIdata', 'currentUser'],
@@ -60,23 +62,30 @@ export default {
     },
     searchForRecipes: function() {
       // fetch('http://localhost:3000/f2f', {
-      fetch('https://recipe-now-server-heroku.herokuapp.com/f2f', {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({'items': this.userSearchData})
-      })
-      .then(function(response) {
-        return response.json()
-      })
-      .then(response => {
-        return this.searchedMealData = response
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
+      if (this.userSearchData.length < 2) {
+        alert("Search must contain at least 2 characters!")
+      } else {
+        fetch('https://recipe-now-server-heroku.herokuapp.com/f2f', {
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({'items': this.userSearchData})
+        })
+        .then(function(response) {
+          return response.json()
+        })
+        .then(response => {
+          if (response.length < 1) {
+            this.noMeals = true
+          } else this.noMeals = false
+          return this.searchedMealData = response
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+      }
     },
     addToMyMeals: function(mealID) {
       this.mealIdToAdd = mealID
