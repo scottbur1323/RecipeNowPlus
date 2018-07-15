@@ -27,6 +27,7 @@ export default new Router({
   ]
 })
 
+// very basic "setup" of a global guard
 // router.beforeEach((to, from, next) => {
 //   if(to.name == 'callback') { // check if "to"-route is "callback" and allow access
 //     next()
@@ -37,4 +38,4 @@ export default new Router({
 //   }
 // })
 //
-// export default {router}
+// export default router
